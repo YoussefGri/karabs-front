@@ -1,0 +1,63 @@
+.desktop-navbar {
+  ion-toolbar {
+    --background: #cc2128;
+    --color: white;
+  }
+
+  ion-button {
+    --color: white;
+    font-weight: 500;
+    transition: background-color 0.3s;
+    
+    &:hover {
+      --background: rgba(255, 255, 255, 0.1);
+    }
+  }
+}
+
+.mobile-navbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  
+  ion-toolbar {
+    --background: white;
+    --border-color: #eee;
+  }
+  
+  ion-buttons {
+    display: flex;
+    width: 100%;
+  }
+  
+  ion-button {
+    flex: 1;
+    --color: #666;
+    --padding-top: 8px;
+    --padding-bottom: 8px;
+    height: auto;
+    
+    &.active-tab {
+      --color: #cc2128;
+    }
+  }
+  
+  .tab-button-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+  
+  ion-icon {
+    font-size: 24px;
+    margin-bottom: 4px;
+  }
+  
+  ion-label {
+    font-size: 12px;
+  }
+}
+

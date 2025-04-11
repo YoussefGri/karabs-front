@@ -1,0 +1,45 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="light">
+    <ion-title>Mon profil</ion-title>
+    <ion-buttons slot="end" *ngIf="user">
+      <ion-button (click)="logout()">
+        <ion-icon name="log-out-outline" slot="icon-only" color="danger"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="profile-card">
+    <div *ngIf="user" class="profile-info">
+      <div class="profile-header">
+        <ion-avatar class="profile-avatar">
+          <img [src]="user.avatar || 'assets/logo.png'" alt="Photo de profil">
+        </ion-avatar>
+        <div class="profile-name-container">
+          <h1 class="profile-name">{{ user.name }}</h1>
+          <p class="profile-activity">Activité préférée : manger</p>
+        </div>
+      </div>
+      
+      <div class="profile-sections">
+        <ion-item *ngFor="let section of profileSections" detail="true" button (click)="navigateTo(section.route)">
+          <ion-icon [name]="section.icon" slot="start" [style.color]="section.color"></ion-icon>
+          <ion-label>{{ section.title }}</ion-label>
+        </ion-item>
+        
+        <!-- Bouton de déconnexion -->
+        <ion-item button (click)="logout()" class="logout-button">
+          <ion-icon name="log-out-outline" slot="start" color="danger"></ion-icon>
+          <ion-label color="danger">Déconnexion</ion-label>
+        </ion-item>
+      </div>
+    </div>
+    
+    <div *ngIf="!user" class="not-logged-in">
+      <p>Vous n'êtes pas connecté.</p>
+      <ion-button expand="block" routerLink="/login" color="danger">Se connecter</ion-button>
+    </div>
+  </div>
+</ion-content>
+

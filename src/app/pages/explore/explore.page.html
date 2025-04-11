@@ -1,0 +1,26 @@
+<ion-header class="ion-no-border">
+    <ion-toolbar color="light">
+      <ion-title>Catégories</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content>
+    <div class="hi">
+    <div class="explore-container">
+      <div class="explore-card">
+        <h1 class="explore-title">Explorer</h1>
+        
+        <div class="category-grid">
+          <div class="category-item" *ngFor="let category of categories" [routerLink]="category.route">
+            <div class="category-image" [style.background-image]="'url(' + category.image + ')'">
+              <div class="category-overlay">
+                <span class="category-name">{{ category.name }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div></div>
+  </ion-content>
+  
+  

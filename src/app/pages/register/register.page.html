@@ -1,0 +1,80 @@
+<ion-content class="ion-padding">
+  <div class="login-container flex-center">
+
+    <ion-card class="login-card">
+      <ion-card-content>
+
+        <div class="logo-container flex-center">
+          <img src="assets/logo.png" alt="Le Krab's" class="logo" />
+          <ion-card-title color="danger">S'inscrire dans le Krab's</ion-card-title>
+        </div>
+
+        <form (submit)="register()">
+          <ion-item class="input-box">
+            <ion-input label="Nom" labelPlacement="floating" type="text" [(ngModel)]="userData.nom" name="nom" required></ion-input>
+          </ion-item>
+
+          <ion-item class="input-box">
+            <ion-input label="Prénom" labelPlacement="floating" type="text" [(ngModel)]="userData.prenom" name="prenom" required></ion-input>
+          </ion-item>
+
+          <ion-item class="input-box">
+            <ion-input label="Email" labelPlacement="floating" type="email" [(ngModel)]="userData.email" name="email" required></ion-input>
+          </ion-item>
+
+          <ion-item class="input-box">
+            <ion-input label="Mot de passe" labelPlacement="floating" type="password" [(ngModel)]="userData.password" name="password" required></ion-input>
+          </ion-item>
+
+          <ion-item class="input-box">
+            <ion-input label="Ville" labelPlacement="floating" type="text" [(ngModel)]="userData.ville" name="ville" required></ion-input>
+          </ion-item>
+
+          <ion-item class="input-box">
+            <ion-input label="Code Postal" labelPlacement="floating" type="text" [(ngModel)]="userData.codePostal" name="codePostal" required></ion-input>
+          </ion-item>
+
+          <!-- Message d'erreur -->
+          <div *ngIf="errorMessage" class="error-message">
+            {{ errorMessage }}
+          </div>
+
+          <div class="forgot-password">
+            <span>Déjà inscrit ? <a href="login" >Se connecter</a></span>
+          </div>
+          
+          <ion-button expand="block" class="login-button" type="submit" color="danger" [disabled]="isSubmitting">
+            S'inscrire
+          </ion-button>
+        </form>
+
+        <div class="divider">
+          <hr class="line" />
+          <span>Ou s'inscrire avec</span>
+          <hr class="line" />
+        </div>
+
+        <div class="social-buttons">
+          <ion-button expand="block" color="secondary" class="facebook-button">
+            <ion-icon name="logo-facebook"></ion-icon>
+            acebook
+          </ion-button>
+
+          <ion-button expand="block" color="medium" class="google-button">
+            <ion-icon name="logo-google"></ion-icon>
+            oogle
+          </ion-button>
+        </div>
+
+        <div class="social-buttons">
+          <ion-button color="light" fill="solid" class="apple-button">
+            <ion-icon name="logo-apple"></ion-icon>
+             Apple
+          </ion-button>
+        </div>
+
+      </ion-card-content>
+    </ion-card>
+
+  </div>
+</ion-content>

@@ -1,0 +1,7 @@
+{
+  "name": "krabs-front",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

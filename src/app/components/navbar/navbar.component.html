@@ -1,0 +1,71 @@
+<!-- Navbar pour desktop (en haut) -->
+<ion-header *ngIf="!isMobile" class="ion-no-border desktop-navbar">
+  <ion-toolbar color="danger">
+    <ion-buttons slot="start">
+      <ion-button routerLink="/home">
+        <ion-icon name="globe-outline" slot="start"></ion-icon>
+        Le Krab's
+      </ion-button>
+    </ion-buttons>
+    
+    <ion-buttons slot="end">
+      <ion-button routerLink="/home">
+        Accueil
+      </ion-button>
+      <ion-button routerLink="/map">
+        Carte
+      </ion-button>
+      <ion-button routerLink="/explore">
+        Explorer
+      </ion-button>
+      <ion-button *ngIf="authService.isLoggedIn()" routerLink="/profile">
+        Profil
+      </ion-button>
+      <ion-button *ngIf="!authService.isLoggedIn()" routerLink="/login">
+        Connexion
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<!-- Navbar pour mobile (en bas) -->
+<ion-footer *ngIf="isMobile" class="ion-no-border mobile-navbar">
+  <ion-toolbar>
+    <ion-buttons class="ion-justify-content-between">
+      <ion-button routerLink="/home" routerDirection="root" routerLinkActive="active-tab">
+        <div class="tab-button-content">
+          <ion-icon name="home-outline"></ion-icon>
+          <ion-label>Accueil</ion-label>
+        </div>
+      </ion-button>
+      
+      <ion-button routerLink="/map" routerDirection="root" routerLinkActive="active-tab">
+        <div class="tab-button-content">
+          <ion-icon name="map-outline"></ion-icon>
+          <ion-label>Carte</ion-label>
+        </div>
+      </ion-button>
+      
+      <ion-button routerLink="/explore" routerDirection="root" routerLinkActive="active-tab">
+        <div class="tab-button-content">
+          <ion-icon name="grid-outline"></ion-icon>
+          <ion-label>Explorer</ion-label>
+        </div>
+      </ion-button>
+      
+      <ion-button *ngIf="authService.isLoggedIn()" routerLink="/profile" routerDirection="root" routerLinkActive="active-tab">
+        <div class="tab-button-content">
+          <ion-icon name="person-outline"></ion-icon>
+          <ion-label>Profil</ion-label>
+        </div>
+      </ion-button>
+      
+      <ion-button *ngIf="!authService.isLoggedIn()" routerLink="/login" routerDirection="root" routerLinkActive="active-tab">
+        <div class="tab-button-content">
+          <ion-icon name="log-in-outline"></ion-icon>
+          <ion-label>Connexion</ion-label>
+        </div>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

@@ -1,0 +1,64 @@
+<ion-content class="ion-padding">
+  <div class="login-container flex-center">
+
+    <ion-card class="login-card">
+      <ion-card-content>
+
+        <div class="logo-container flex-center">
+          <img src="assets/logo.png" alt="Le Krab's" class="logo" />
+          <ion-card-title color="danger"> Le Karab's </ion-card-title>
+        </div>
+
+        <form (ngSubmit)="login()">
+          <ion-item class="input-box">
+            <ion-input label="Email" labelPlacement="floating" type="email" [(ngModel)]="email" name="email" required></ion-input>
+          </ion-item>
+
+          <ion-item class="input-box">
+            <ion-input label="Mot de passe" labelPlacement="floating" type="password" [(ngModel)]="password" name="password" required></ion-input>
+          </ion-item>
+
+          <!-- Message d'erreur -->
+          <div *ngIf="errorMessage" class="error-message">
+            {{ errorMessage }}
+          </div>
+
+          <div class="forgot-password">
+            <a href="register" class="right">S'inscrire</a>
+          </div>
+          
+          <ion-button expand="block" class="login-button" type="submit" color="danger">
+            Se connecter
+          </ion-button>
+        </form>
+
+        <div class="divider">
+          <hr class="line" />
+          <span>Ou s'inscrire avec</span>
+          <hr class="line" />
+        </div>
+
+        <div class="social-buttons">
+          <ion-button expand="block" color="secondary" class="facebook-button" (click)="loginWithProvider('facebook')">
+            <ion-icon name="logo-facebook"></ion-icon>
+            acebook
+          </ion-button>
+
+          <ion-button expand="block" color="medium" class="google-button" (click)="loginWithProvider('google')">
+            <ion-icon name="logo-google"></ion-icon>
+            oogle
+          </ion-button>
+        </div>
+
+        <div class="social-buttons">
+          <ion-button color="light" fill="solid" class="apple-button" (click)="loginWithProvider('apple')">
+            <ion-icon name="logo-apple"></ion-icon>
+             Apple
+          </ion-button>
+        </div>
+
+      </ion-card-content>
+    </ion-card>
+
+  </div>
+</ion-content>
