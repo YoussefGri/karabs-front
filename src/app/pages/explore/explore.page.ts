@@ -42,6 +42,11 @@ export class ExplorePage {
       image: "assets/se_cultiver.png",
       route: "/explore/cultiver",
     },
+    {
+      name: "Toutes les catégories",
+      image: "assets/default.jpg",
+      route: "/explore/toutes",
+    }
   ]
 
   constructor() {}

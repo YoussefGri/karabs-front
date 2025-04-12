@@ -5,7 +5,7 @@ ion-header {
     
     ion-title {
       font-size: 16px;
-      color: #666;
+      color: #ffffff;
     }
   }
 
@@ -41,6 +41,13 @@ ion-header {
     grid-template-columns: repeat(2, 1fr);
     gap: 16px;
   }
+
+  .full-width-centered {
+    grid-column: span 2;
+    justify-self: center;
+    width: 60%;
+  }
+  
   
   .category-item {
     border-radius: 12px;
@@ -92,5 +99,7 @@ ion-header {
         padding-top: 30px;
       }
   }
+
+
   
   

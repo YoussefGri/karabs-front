@@ -41,6 +41,12 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
+    path: "explore/:nom",
+    loadComponent: () =>
+      import("./pages/enseignes/enseignes.page").then(m => m.EnseignesPage),
+    canActivate: [AuthGuard],
+  },
+  {
     path: "",
     redirectTo: "home",
     pathMatch: "full",
@@ -48,7 +54,7 @@ const routes: Routes = [
   {
     path: "**",
     redirectTo: "home",
-  },
+  }
 ]
 
 @NgModule({
