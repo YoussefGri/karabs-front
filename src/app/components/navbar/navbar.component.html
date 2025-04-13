@@ -18,6 +18,9 @@
       <ion-button routerLink="/explore">
         Explorer
       </ion-button>
+      <ion-button routerLink="/favoris">
+        Favoris
+      </ion-button>      
       <ion-button *ngIf="authService.isLoggedIn()" routerLink="/profile">
         Profil
       </ion-button>
@@ -50,6 +53,13 @@
         <div class="tab-button-content">
           <ion-icon name="grid-outline"></ion-icon>
           <ion-label>Explorer</ion-label>
+        </div>
+      </ion-button>
+
+      <ion-button routerLink="/favoris" routerDirection="root" routerLinkActive="active-tab">
+        <div class="tab-button-content">
+          <ion-icon name="heart-outline"></ion-icon>
+          <ion-label>Favoris</ion-label>
         </div>
       </ion-button>
       

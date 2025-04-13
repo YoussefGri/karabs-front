@@ -37,13 +37,21 @@ const routes: Routes = [
   },
   {
     path: "explore",
-    component: ExplorePage,
+    //component: ExplorePage,
+    loadComponent: () => import('./pages/explore/explore.page').then(m => m.ExplorePage),
     canActivate: [AuthGuard],
   },
   {
     path: "explore/:nom",
     loadComponent: () =>
       import("./pages/enseignes/enseignes.page").then(m => m.EnseignesPage),
+    canActivate: [AuthGuard],
+  },
+  {
+
+    path : "favoris",
+    loadComponent: () =>
+      import("./pages/favoris/favoris.page").then(m => m.FavorisPage),
     canActivate: [AuthGuard],
   },
   {

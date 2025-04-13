@@ -10,6 +10,7 @@ import { AppRoutingModule } from "./app-routing.module"
 import { JwtInterceptor } from "./interceptors/jwt.interceptor"
 import { HomePage } from "./pages/home/home.page"
 import { NavbarComponent } from "./components/navbar/navbar.component"
+import { AuthInterceptor } from "./interceptors/auth.interceptor"
 
 @NgModule({
   declarations: [AppComponent, HomePage],
@@ -17,6 +18,8 @@ import { NavbarComponent } from "./components/navbar/navbar.component"
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+
   ],
   bootstrap: [AppComponent],
 })

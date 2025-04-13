@@ -1,0 +1,54 @@
+<ion-header>
+    <ion-toolbar color="danger">
+      <ion-title>Mes favoris</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content>
+    <div class="enseigne-list" *ngIf="favoris.length > 0; else noFavoris">
+      <div class="card" *ngFor="let enseigne of favoris">
+        <img [src]="enseigne.photo || 'assets/default.jpg'" class="enseigne-image" />
+        <div class="card-content">
+            <div class="title-row">
+                <h2>{{ enseigne.nom }}</h2>
+                <ion-button fill="clear" size="small" (click)="removeFromFavoris(enseigne.id)">
+                  <ion-icon name="heart-dislike-outline" class="favorite-icon"></ion-icon>
+                </ion-button>
+              </div>          
+            <p>{{ enseigne.description }}</p>
+            <p>{{ enseigne.adresse }}</p>
+            <p>{{ enseigne.numeroTelephone }}</p>
+          <div class="card-footer">
+            <div class="stars">
+              <ng-container *ngFor="let star of [1,2,3,4,5]">
+                <ion-icon
+                  [name]="enseigne.noteMoyenne >= star ? 'star' : enseigne.noteMoyenne >= star - 0.5 ? 'star-half' : 'star-outline'"
+                  class="star-icon"
+                ></ion-icon>
+              </ng-container>
+              <span class="note">({{ enseigne.noteMoyenne || 'N/A' }})</span>
+            </div>
+            <ion-button color="danger" (click)="openInGoogleMaps(enseigne)">
+                <ion-icon name="navigate" slot="start"></ion-icon>
+                Y aller
+              </ion-button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #noFavoris>
+        <div class="empty-state">
+            <div class="empty-icon">
+                <ion-icon name="heart-dislike" class="empty-heart"></ion-icon>
+            </div>
+            <h2>Aucun favoris</h2>
+            <p>Vous n'avez pas encore ajouté d'enseignes à vos favoris</p>
+            <ion-button color="danger" fill="outline" (click)="goToExplore()">
+                Explorer les enseignes
+            </ion-button>
+        </div>
+    </ng-template>
+
+  </ion-content>
+  

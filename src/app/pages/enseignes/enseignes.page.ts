@@ -1,10 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
-import { IonicModule } from '@ionic/angular';
-import { CommonModule } from '@angular/common';
-import { ModalController } from '@ionic/angular';
+import { Component, OnInit } from '@angular/core'
+import { ActivatedRoute, Router } from '@angular/router'
+import { EnseignesService } from 'src/app/services/enseignes.service'
+import { IonicModule } from '@ionic/angular'
+import { CommonModule } from '@angular/common'
 
 @Component({
   selector: 'app-enseignes',
@@ -14,59 +12,83 @@ import { ModalController } from '@ionic/angular';
   imports: [IonicModule, CommonModule]
 })
 export class EnseignesPage implements OnInit {
-  categoryName: string = '';
-  enseignes: any[] = [];
-  showFilterOptions = false;
+  categoryName = ''
+  enseignes: any[] = []
+  favoris: number[] = []
+  showFilterOptions = false
+  selectedCriteres: string[] = []
 
-  constructor(private route: ActivatedRoute, private http: HttpClient, private modalController: ModalController) {}
-  
   criteres = [
     { key: 'noteMoyenne', label: 'Note Moyenne' },
     { key: 'noteAmbiance', label: 'Ambiance' },
     { key: 'notePrix', label: 'Prix' },
-  ];
-  
-  selectedCriteres: string[] = [];
+  ]
 
-  capitalizeFirstLetter(str: string): string {
-    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private enseigneService: EnseignesService
+  ) {}
+
+  ngOnInit() {
+    this.categoryName = this.route.snapshot.paramMap.get('nom') || ''
+    this.enseigneService.getEnseignesByCategory(this.categoryName).subscribe((data: any) => {
+      this.enseignes = data.enseignes ?? data
+      this.favoris = data.favoris ?? []
+    })
+  }
+
+  toggleFavori(enseigne: any) {
+    const index = this.favoris.indexOf(enseigne.id)
+    if (index > -1) {
+      this.favoris.splice(index, 1)
+      this.enseigneService.removeFavori(enseigne.id).subscribe()
+    } else {
+      this.favoris.push(enseigne.id)
+      this.enseigneService.addFavori(enseigne.id).subscribe()
+    }
+  }
+
+  isFavori(id: number): boolean {
+    return this.favoris.includes(id)
+  }
+
+  toggleCritere(key: string) {
+    const index = this.selectedCriteres.indexOf(key)
+    if (index > -1) this.selectedCriteres.splice(index, 1)
+    else this.selectedCriteres.push(key)
+    this.sortEnseignes()
+  }
+
+  sortEnseignes() {
+    this.enseignes.sort((a, b) => {
+      for (const key of this.selectedCriteres) {
+        if ((b[key] ?? 0) !== (a[key] ?? 0)) {
+          return (b[key] ?? 0) - (a[key] ?? 0)
+        }
+      }
+      return 0
+    })
+  }
+
+  openInGoogleMaps(enseigne: any) {
+    const query = encodeURIComponent(enseigne.gpsLocation || enseigne.adresse)
+    window.open(`https://www.google.com/maps/search/?api=1&query=${query}`, '_blank')
+  }
+
+  goToExplore() {
+    this.router.navigate(['/explore'])
   }
 
   getCritereLabel(key: string): string {
-    const critere = this.criteres.find(c => c.key === key);
-    return critere ? critere.label : '';
-  }
-  
-  toggleCritere(critereKey: string) {
-    const index = this.selectedCriteres.indexOf(critereKey);
-    if (index > -1) {
-      this.selectedCriteres.splice(index, 1);
-    } else {
-      this.selectedCriteres.push(critereKey);
-    }
-    this.sortEnseignes();
-  }  
-  
-  sortEnseignes() {
-    this.enseignes.sort((a, b) => {
-      for (const critere of this.selectedCriteres) {
-        if ((b[critere] ?? 0) !== (a[critere] ?? 0)) {
-          return (b[critere] ?? 0) - (a[critere] ?? 0);
-        }
-      }
-      return 0;
-    });
-  }
-  
-  toggleFilterOptions() {
-    this.showFilterOptions = !this.showFilterOptions;
+    return this.criteres.find(c => c.key === key)?.label || ''
   }
 
-  ngOnInit() {
-    this.categoryName = this.route.snapshot.paramMap.get('nom') || '';
-    this.http.get(`${environment.apiUrl}/api/enseignes/by-category/${this.categoryName}`)
-      .subscribe((data: any) => {
-        this.enseignes = data;
-      });
+  capitalizeFirstLetter(str: string): string {
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
+  }
+
+  toggleFilterOptions() {
+    this.showFilterOptions = !this.showFilterOptions
   }
 }
