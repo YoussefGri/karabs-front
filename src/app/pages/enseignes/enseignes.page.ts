@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { EnseignesService } from 'src/app/services/enseignes.service'
 import { IonicModule } from '@ionic/angular'
 import { CommonModule } from '@angular/common'
+import { UtilsService } from 'src/app/services/utils.service'
+import { MenuController } from '@ionic/angular'
 
 @Component({
   selector: 'app-enseignes',
@@ -27,7 +29,9 @@ export class EnseignesPage implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private enseigneService: EnseignesService
+    private enseigneService: EnseignesService,
+    private utilsService: UtilsService,
+    private menuCtrl: MenuController
   ) {}
 
   ngOnInit() {
@@ -36,6 +40,14 @@ export class EnseignesPage implements OnInit {
       this.enseignes = data.enseignes ?? data
       this.favoris = data.favoris ?? []
     })
+  }
+
+  openMenu() {
+    this.menuCtrl.open('end');
+  }
+
+  closeMenu() {
+    this.menuCtrl.close('end');
   }
 
   toggleFavori(enseigne: any) {
@@ -58,6 +70,10 @@ export class EnseignesPage implements OnInit {
     if (index > -1) this.selectedCriteres.splice(index, 1)
     else this.selectedCriteres.push(key)
     this.sortEnseignes()
+
+    if (this.selectedCriteres.length === 0) {
+      this.closeMenu();
+    }
   }
 
   sortEnseignes() {
@@ -72,8 +88,7 @@ export class EnseignesPage implements OnInit {
   }
 
   openInGoogleMaps(enseigne: any) {
-    const query = encodeURIComponent(enseigne.gpsLocation || enseigne.adresse)
-    window.open(`https://www.google.com/maps/search/?api=1&query=${query}`, '_blank')
+    this.utilsService.openInGoogleMaps(enseigne);
   }
 
   goToExplore() {

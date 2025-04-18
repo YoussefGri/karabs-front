@@ -8,6 +8,7 @@ import { HomePage } from "./pages/home/home.page"
 import { RegisterPage } from "./pages/register/register.page"
 import { AccountPage } from "./pages/profile/account/account.page"
 import { ExplorePage } from "./pages/explore/explore.page"
+import { MapPage } from "./pages/map/map.page"
 
 const routes: Routes = [
   {
@@ -53,6 +54,16 @@ const routes: Routes = [
     loadComponent: () =>
       import("./pages/favoris/favoris.page").then(m => m.FavorisPage),
     canActivate: [AuthGuard],
+  },
+  {
+    path: 'map',
+    loadComponent: () =>
+      import("./pages/map/map.page").then(m => m.MapPage),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'map-modal',
+    loadChildren: () => import('./pages/map-modal/map-modal.page').then( m => m.MapModalPage)
   },
   {
     path: "",

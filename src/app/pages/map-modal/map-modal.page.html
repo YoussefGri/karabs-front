@@ -1,0 +1,55 @@
+<ion-content class="ion-padding">
+  <div *ngIf="enseigne; else noData" class="modal-content">
+    <h2 class="enseigne-title">{{ enseigne.nom }}</h2>
+    
+    <!-- Note et étoiles -->
+    <div class="rating-container">
+      <div class="stars">
+        <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
+          <ion-icon
+            [name]="enseigne.noteMoyenne >= star ? 'star' : enseigne.noteMoyenne >= star - 0.5 ? 'star-half' : 'star-outline'"
+            class="star-icon"
+          ></ion-icon>
+        </ng-container>
+      </div>
+      <span class="note-text">{{ enseigne.noteMoyenne || 'N/A' }}</span>
+    </div>
+
+        <!-- Catégories -->
+        <div class="categories" *ngIf="enseigne.categories?.length">
+          <ion-chip color="tertiary" *ngFor="let cat of enseigne.categories">
+            <ion-label>{{ cat.nom }}</ion-label>
+          </ion-chip>
+        </div>
+        
+        <!-- Boutons actions -->
+        <div class="action-buttons">
+          <ion-button expand="block" color="danger" (click)="openInGoogleMaps(enseigne)" class="action-button">
+            <ion-icon name="navigate" slot="start"></ion-icon>
+            Y aller
+          </ion-button>
+          <ion-button expand="block" color="primary" (click)="callNumber(enseigne.numeroTelephone)" class="action-button">
+            <ion-icon name="call" slot="start"></ion-icon>
+            Appeler
+          </ion-button>
+        </div>
+    
+    <!-- Image principale -->
+    <div class="image-container">
+      <img
+        [src]="enseigne.photo || 'assets/default.jpg'"
+        class="enseigne-image"
+        alt="Photo de l'enseigne"
+      />
+    </div>
+
+
+  </div>
+  
+  <ng-template #noData>
+    <div class="no-data-container">
+      <ion-icon name="alert-circle-outline" class="no-data-icon"></ion-icon>
+      <p class="no-data">Aucune information disponible</p>
+    </div>
+  </ng-template>
+</ion-content>

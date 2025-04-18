@@ -11,6 +11,7 @@ ion-header {
 
   .hi {
     background-color: #f2f2f2;
+    margin-bottom: 50px;
   }
 
   .explore-container {
@@ -22,7 +23,7 @@ ion-header {
   }
   
   .explore-card {
-    background-color: white;
+    background-color: rgb(255, 255, 255);
     border-radius: 16px;
     padding: 20px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);

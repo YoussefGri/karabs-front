@@ -12,20 +12,18 @@
   }
 
   .favorite-icon {
-    font-size: 20px;
+    font-size: 18px;
     color: #c73e3e;
   }
 
-  ion-button {
-    margin-left: 8px;
-  }
 }
 
 .enseigne-list {
-    padding: 16px;
+    padding: 10px;
     display: flex;
     flex-direction: column;
     gap: 16px;
+    margin-bottom: 50px;
   }
   
   .card {
@@ -36,12 +34,12 @@
     overflow: hidden;
     flex-direction: row;
     align-items: center;
-    padding: 12px;
+    padding: 5px;
   }
   
   .enseigne-image {
-    width: 200px;
-    height: 130px;
+    width: 35%;
+    height:120px;
     border-radius: 12px;
     object-fit: cover;
     margin-right: 12px;
@@ -89,19 +87,43 @@
       }
     }
   
-    ion-button {
-      height: 32px;
-      font-size: 14px;
-      --border-radius: 12px;
-      margin: 0;
-    }
+    // ion-button {
+    //   font-size: 14px;
+    //   --border-radius: 12px;
+    //   margin: 0;
+    // }
   }
+
+  // .selected-filters {
+  //   display: flex;
+  //   flex-wrap: wrap;
+  //   padding: 8px;
+  //   background: #f8f8f8;
+  // }
+
+  ion-menu {
+    --width: 300px;
+    --background: #f8f8f8f3;
+  }
+  
 
   .selected-filters {
     display: flex;
     flex-wrap: wrap;
-    padding: 8px;
-    background: #f8f8f8;
+    padding: 10px 12px;
+    gap: 8px;
+    background-color: #f8f8f8;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .selected-filters ion-chip {
+    margin: 0;
+    height: 28px;
+    font-size: 13px;
+  }
+  
+  .selected-filters ion-label {
+    font-weight: 500;
   }
   
   .filter-options {

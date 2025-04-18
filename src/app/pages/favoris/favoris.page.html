@@ -11,6 +11,9 @@
         <div class="card-content">
             <div class="title-row">
                 <h2>{{ enseigne.nom }}</h2>
+                <ion-button fill="clear" color="danger" (click)="openInGoogleMaps(enseigne)">
+                  <ion-icon slot="icon-only" name="navigate" size="small"></ion-icon>
+                </ion-button>
                 <ion-button fill="clear" size="small" (click)="removeFromFavoris(enseigne.id)">
                   <ion-icon name="heart-dislike-outline" class="favorite-icon"></ion-icon>
                 </ion-button>
@@ -28,10 +31,6 @@
               </ng-container>
               <span class="note">({{ enseigne.noteMoyenne || 'N/A' }})</span>
             </div>
-            <ion-button color="danger" (click)="openInGoogleMaps(enseigne)">
-                <ion-icon name="navigate" slot="start"></ion-icon>
-                Y aller
-              </ion-button>
           </div>
         </div>
       </div>

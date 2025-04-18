@@ -4,6 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { UtilsService } from 'src/app/services/utils.service';
 
+
 @Component({
   selector: 'app-favoris',
   templateUrl: './favoris.page.html',
