@@ -65,6 +65,14 @@ const routes: Routes = [
     path: 'map-modal',
     loadChildren: () => import('./pages/map-modal/map-modal.page').then( m => m.MapModalPage)
   },
+
+  {
+    path: 'enseigne/:id',
+    loadComponent: () => 
+      import('./pages/enseigne-detail/enseigne-detail.page').then(m => m.EnseigneDetailPage),
+    canActivate: [AuthGuard] 
+  },
+  
   {
     path: "",
     redirectTo: "home",

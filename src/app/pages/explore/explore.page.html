@@ -1,45 +1,26 @@
+
 <ion-header class="ion-no-border">
-    <ion-toolbar color="danger">
-      <ion-title>Catégories</ion-title>
-    </ion-toolbar>
-  </ion-header>
-  
-  <ion-content>
-    <div class="hi">
-    <div class="explore-container">
-      <div class="explore-card">
-        <h1 class="explore-title">Explorer</h1>
-        
-        <!-- <div class="category-grid">
-          <div class="category-item" *ngFor="let category of categories" [routerLink]="category.route">
+  <ion-toolbar color="danger">
+    <ion-title>Catégories</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="centered-content">
+  <div class="explore-container">
+    <div class="explore-card">
+      <div class="category-grid">
+        <ng-container *ngFor="let category of categories; let i = index">
+          <div class="category-item" 
+               [routerLink]="category.route"
+               [ngClass]="getCategoryClasses(i)">
             <div class="category-image" [style.background-image]="'url(' + category.image + ')'">
               <div class="category-overlay">
                 <span class="category-name">{{ category.name }}</span>
               </div>
             </div>
           </div>
-        </div> -->
-        <div class="category-grid">
-          <ng-container *ngFor="let category of categories; let i = index">
-            <div
-              class="category-item"
-              [routerLink]="category.route"
-              [ngClass]="{
-                'full-width-centered': categories.length % 2 === 1 && i === categories.length - 1
-              }"
-            >
-              <div class="category-image" [style.background-image]="'url(' + category.image + ')'">
-                <div class="category-overlay">
-                  <span class="category-name">{{ category.name }}</span>
-                </div>
-              </div>
-            </div>
-          </ng-container>
-        </div>
-        
+        </ng-container>
       </div>
     </div>
   </div>
-  </ion-content>
-  
-  
+</ion-content> 

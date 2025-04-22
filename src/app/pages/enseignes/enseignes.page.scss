@@ -1,89 +1,146 @@
+ion-toolbar {
+  --background: var(--background, var(--ion-color-danger)); /* Fallback */
+  --color: white;
+  
+  ion-title, ion-icon {
+    color: white;
+  }
+}
+
+.card-content p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ion-color-medium);
+}
+
+.enseigne-category {
+  font-weight: 500;
+  color: var(--ion-color-danger) !important;
+  margin-bottom: 2px;
+  font-size: 13px !important;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.enseigne-slogan {
+  font-style: italic;
+  color: var(--ion-color-dark) !important;
+  margin-bottom: 4px !important;
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+}
+
+.enseigne-adresse,
+.enseigne-phone {
+  display: flex;
+  align-items: center;
+  color: var(--ion-color-medium) !important;
+  //margin: 2px 0 !important;
+  font-size: 13px !important;
+}
+
+.enseigne-info {
+  display: flex;
+  align-items: center;
+  //margin: 2px 0;
+  
+  .info-icon {
+    margin-right: 6px;
+    font-size: 16px;
+    color: var(--ion-color-medium);
+  }
+}
 
 .title-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  //margin-bottom: 3px;
 
   h2 {
     margin: 0;
     font-size: 18px;
     font-weight: bold;
     flex: 1;
+    color: var(--ion-color-dark);
   }
 
   .favorite-icon {
     font-size: 18px;
     color: #c73e3e;
   }
-
 }
 
 .enseigne-list {
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    margin-bottom: 50px;
-  }
-  
-  .card {
-    display: flex;
-    background-color: #C923230D;
-    border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    overflow: hidden;
-    flex-direction: row;
-    align-items: center;
-    padding: 5px;
-  }
-  
-  .enseigne-image {
-    width: 35%;
-    height:120px;
-    border-radius: 12px;
-    object-fit: cover;
-    margin-right: 12px;
-    flex-shrink: 0;
-  }
-  
-  .card-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  
-    h2 {
-      margin: 0;
-      font-size: 18px;
-      font-weight: bold;
-    }
-  
-    p {
-      margin: 0;
-      font-size: 14px;
-      color: #555;
-    }
-  }
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 60px;
+}
 
-  .card-footer {
+.card {
+  display: flex;
+  background-color: rgba(201, 35, 35, 0.05);
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  flex-direction: row;
+  align-items: center;
+  padding: 4px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  
+  
+  
+  &:active {
+    transform: scale(0.98);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.enseigne-image {
+  width: 40%;
+  height: 140px;
+  border-radius: 12px;
+  object-fit: cover;
+  margin-right: 6px;
+  flex-shrink: 0;
+}
+
+.card-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4px;
+
+  .stars {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-top: 8px;
-  
-    .stars {
-      display: flex;
-      align-items: center;
-  
-      .star-icon {
-        color: #fbc02d;
-        font-size: 18px;
-      }
-  
-      .note {
-        margin-left: 6px;
-        font-size: 13px;
-        color: #666;
+
+    .star-icon {
+      color: #fbc02d;
+      font-size: 18px;
+    }
+
+    .note {
+      margin-left: 6px;
+      font-size: 13px;
+      color: #666;
+    }
+  }
+    ion-button {
+      &[fill="outline"] {
+        --border-color: var(--background, var(--ion-color-danger));
+        --color: var(--background, var(--ion-color-danger));
       }
     }
   
@@ -120,6 +177,8 @@
     margin: 0;
     height: 28px;
     font-size: 13px;
+    --background: var(--background, var(--ion-color-danger));
+    --color: white;
   }
   
   .selected-filters ion-label {
@@ -186,7 +245,7 @@
     .enseigne-info {
         display: flex;
         align-items: center;
-        margin-bottom: 6px;
+        //margin-bottom: 6px;
         color: var(--ion-color-dark);
         font-size: 0.9rem;
         
@@ -198,7 +257,7 @@
     }
     
     .card-footer {
-        margin-top: 12px;
+        //margin-top: 12px;
         padding-top: 12px;
         border-top: 1px solid var(--ion-color-light-shade);
         
@@ -263,14 +322,27 @@
     h2 {
         font-size: 1.4rem;
         color: var(--ion-color-dark);
-        margin-bottom: 8px;
+        //margin-bottom: 8px;
         font-weight: 600;
     }
     
     p {
         color: var(--ion-color-medium);
         font-size: 1rem;
-        margin-bottom: 24px;
+        //margin-bottom: 24px;
         max-width: 300px;
     }
 }
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  ion-spinner {
+    margin-bottom: 1rem;
+    transform: scale(1.5);
+  }
+}
+

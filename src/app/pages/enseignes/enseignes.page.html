@@ -1,104 +1,125 @@
-<ion-header>
-  <ion-toolbar color="danger">
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/explore"></ion-back-button>
-    </ion-buttons>
-    <ion-title>{{ capitalizeFirstLetter(categoryName) }}</ion-title>
-    <ion-buttons slot="end">
-      <ion-menu-button>
-        <ion-icon name="filter"></ion-icon>
-      </ion-menu-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+<div class="loading-wrapper" *ngIf="isLoading">
+  <ion-spinner name="crescent" color="danger"></ion-spinner>
+  <!-- <p class="loading-text">Chargement des enseignes...</p> -->
+</div>
 
-<ion-menu side="end" contentId="main-content">
+<ng-container *ngIf="!isLoading">
   <ion-header>
-    <ion-toolbar color="danger">
-      <ion-title>Filtres</ion-title>
+    <ion-toolbar [style.--background]="categoryColor">
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="/explore"
+                         color="light"
+                         text="Retour"
+                         class="text-back-button"></ion-back-button>
+      </ion-buttons>
+      <ion-title>{{ capitalizeFirstLetter(categoryName) }}</ion-title>
       <ion-buttons slot="end">
-        <ion-button (click)="closeMenu()">
-          <ion-icon slot="icon-only" name="close"></ion-icon>
-        </ion-button>
+        <ion-menu-button>
+          <ion-icon name="filter"></ion-icon>
+        </ion-menu-button>
       </ion-buttons>
     </ion-toolbar>
   </ion-header>
-  <ion-content>
-    <!-- Options de filtre -->
-    <ion-list>
-      <ion-list-header>
-        <ion-label>Trier par</ion-label>
-      </ion-list-header>
-      
-      <ion-item *ngFor="let critere of criteres">
-        <ion-label>{{ critere.label }}</ion-label>
-        <ion-toggle 
-          [checked]="selectedCriteres.includes(critere.key)"
-          (ionChange)="toggleCritere(critere.key)"
-          color="danger">
-        </ion-toggle>
-      </ion-item>
-    </ion-list>
-  </ion-content>
-</ion-menu>
 
-<ion-content id="main-content">
-  <!-- Filtres sélectionnés déplacés ici -->
-  <div class="selected-filters" *ngIf="selectedCriteres.length > 0">
-    <ion-chip *ngFor="let critereKey of selectedCriteres" color="danger" (click)="toggleCritere(critereKey)">
-      <ion-label>{{ getCritereLabel(critereKey) }}</ion-label>
-      <ion-icon name="close"></ion-icon>
-    </ion-chip>
-  </div>
+  <!-- Menu des filtres -->
+  <ion-menu side="end" contentId="main-content">
+    <ion-header>
+      <ion-toolbar [style.--background]="categoryColor">
+        <ion-title>Filtres</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="closeMenu()">
+            <ion-icon slot="icon-only" name="close"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-list>
+        <ion-list-header>
+          <ion-label>Trier par</ion-label>
+        </ion-list-header>
 
-  <!-- Liste des enseignes -->
-  <div class="enseigne-list">
-    <!-- Message si aucune enseigne trouvée -->
-    <div class="empty-state" *ngIf="enseignes.length === 0">
-      <div class="empty-icon">
-        <ion-icon name="storefront-outline" class="empty-store"></ion-icon>
-      </div>
-      <h2>Aucune enseigne trouvée</h2>
-      <p>Il n'y a actuellement aucune enseigne pour cette catégorie.</p>
-      <ion-button color="danger" fill="outline" (click)="goToExplore()">
-        Retour aux catégories
-      </ion-button>
+        <ion-item *ngFor="let critere of criteres">
+          <ion-label>{{ critere.label }}</ion-label>
+          <ion-toggle 
+            [checked]="selectedCriteres.includes(critere.key)"
+            (ionChange)="toggleCritere(critere.key)"
+            color="danger">
+          </ion-toggle>
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ion-menu>
+
+  <ion-content id="main-content">
+    <!-- Filtres sélectionnés -->
+    <div class="selected-filters" *ngIf="selectedCriteres.length > 0">
+      <ion-chip *ngFor="let critereKey of selectedCriteres" 
+                [style.--background]="categoryColor"
+                (click)="toggleCritere(critereKey)">
+        <ion-label>{{ getCritereLabel(critereKey) }}</ion-label>
+        <ion-icon name="close"></ion-icon>
+      </ion-chip>
     </div>
-  
-    <div class="card" *ngFor="let enseigne of enseignes">
-      <img [src]="enseigne.photo || 'assets/default.jpg'" class="enseigne-image" />
-      <div class="card-content">
-        
-        <div class="title-row">
-          <h2>{{ enseigne.nom }}</h2>
-          <ion-button fill="clear" color="danger" (click)="openInGoogleMaps(enseigne)">
-            <ion-icon slot="icon-only" name="navigate" size="small"></ion-icon>
-          </ion-button>
-          <ion-button fill="clear" size="small" (click)="toggleFavori(enseigne)">
-            <ion-icon
-              slot="icon-only"
-              [name]="isFavori(enseigne.id) ? 'heart' : 'heart-outline'"
-              class="favorite-icon"
-            ></ion-icon>
-          </ion-button>
+
+    <!-- Liste des enseignes -->
+    <div class="enseigne-list">
+      <div class="empty-state" *ngIf="enseignes.length === 0">
+        <div class="empty-icon">
+          <ion-icon name="storefront-outline" class="empty-store"></ion-icon>
         </div>
+        <h2>Aucune enseigne trouvée</h2>
+        <p>Il n'y a actuellement aucune enseigne pour cette catégorie.</p>
+        <ion-button color="danger" fill="outline" 
+                    [style.--background]="categoryColor"
+                    (click)="goToExplore()">
+          Retour aux catégories
+        </ion-button>
+      </div>
 
-        <p>{{ enseigne.description }}</p>
-        <p>{{ enseigne.adresse }}</p>
-        <p>{{ enseigne.numeroTelephone }}</p>
-
-        <div class="card-footer">
-          <div class="stars">
-            <ng-container *ngFor="let star of [1,2,3,4,5]">
+      <div class="card" *ngFor="let enseigne of enseignes">
+        <img [src]="enseigne.photo || 'assets/default.jpg'" class="enseigne-image" (click)="goToEnseigneDetail(enseigne.id)"/>
+        <div class="card-content">
+          <div class="title-row">
+            <h4>{{ enseigne.nom }}</h4>
+            <ion-button fill="clear" color="danger" (click)="openInGoogleMaps(enseigne.adresse)">
+              <ion-icon slot="icon-only" name="navigate" size="small"></ion-icon>
+            </ion-button>
+            <ion-button fill="clear" size="small" (click)="toggleFavori(enseigne)">
               <ion-icon
-                [name]="enseigne.noteMoyenne >= star ? 'star' : enseigne.noteMoyenne >= star - 0.5 ? 'star-half' : 'star-outline'"
-                class="star-icon"
+                slot="icon-only"
+                [name]="isFavori(enseigne.id) ? 'heart' : 'heart-outline'"
+                class="favorite-icon"
               ></ion-icon>
-            </ng-container>
-            <span class="note">({{ enseigne.noteMoyenne }})</span>
+            </ion-button>
+          </div>
+
+          <p class="enseigne-category">{{ enseigne.categorie }}</p>
+          <p class="enseigne-slogan" (click)="goToEnseigneDetail(enseigne.id)">{{ enseigne.slogan }}</p>
+
+          <div class="enseigne-info">
+            <ion-icon name="location-outline" class="info-icon"></ion-icon>
+            <p class="enseigne-adresse">{{ enseigne.adresse }}</p>
+          </div>
+
+          <div class="enseigne-info">
+            <ion-icon name="call-outline" class="info-icon"></ion-icon>
+            <p class="enseigne-phone">{{ enseigne.numeroTelephone }}</p>
+          </div>
+
+          <div class="card-footer">
+            <div class="stars">
+              <ng-container *ngFor="let star of [1,2,3,4,5]">
+                <ion-icon
+                  [name]="enseigne.noteMoyenne >= star ? 'star' : enseigne.noteMoyenne >= star - 0.5 ? 'star-half' : 'star-outline'"
+                  class="star-icon"
+                ></ion-icon>
+              </ng-container>
+              <span class="note">({{ enseigne.noteMoyenne }})</span>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</ion-content>
+  </ion-content>
+</ng-container>

@@ -21,11 +21,12 @@ export class MapModalPage {
     categories?: { id: number; nom: string }[] | null;
     lat: number | null;
     lng: number | null;
+    adresse: string;
   } | undefined;
 
   constructor(private utilsService: UtilsService) {}
-  openInGoogleMaps(enseigne: any) {
-    this.utilsService.openInGoogleMaps(enseigne);
+  openInGoogleMaps(adresse: string) {
+    this.utilsService.openInGoogleMaps(adresse);
   }
   
   callNumber(numeroTelephone: any) {

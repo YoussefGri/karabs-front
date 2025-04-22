@@ -5,9 +5,9 @@
   </ion-header>
   
   <ion-content>
-    <div class="enseigne-list" *ngIf="favoris.length > 0; else noFavoris">
+    <div class="enseigne-list" *ngIf="favoris.length > 0 ; else noFavoris">
       <div class="card" *ngFor="let enseigne of favoris">
-        <img [src]="enseigne.photo || 'assets/default.jpg'" class="enseigne-image" />
+        <img [src]="enseigne.photo || 'assets/default.jpg'" class="enseigne-image"  (click)="goToEnseigneDetail(enseigne.id)"/>
         <div class="card-content">
             <div class="title-row">
                 <h2>{{ enseigne.nom }}</h2>
@@ -18,7 +18,7 @@
                   <ion-icon name="heart-dislike-outline" class="favorite-icon"></ion-icon>
                 </ion-button>
               </div>          
-            <p>{{ enseigne.description }}</p>
+            <p  (click)="goToEnseigneDetail(enseigne.id)">{{ enseigne.slogan }}</p>
             <p>{{ enseigne.adresse }}</p>
             <p>{{ enseigne.numeroTelephone }}</p>
           <div class="card-footer">

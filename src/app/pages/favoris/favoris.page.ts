@@ -35,4 +35,8 @@ export class FavorisPage implements OnInit {
   goToExplore() {
     this.utils.goToExplore();
   }
+
+  goToEnseigneDetail(number: number) {
+    this.utils.goToEnseigneDetail(number);
+  }
 }

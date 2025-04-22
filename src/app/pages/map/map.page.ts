@@ -8,6 +8,7 @@ import { environment } from 'src/environments/environment';
 import { ModalController } from '@ionic/angular';
 import { MapModalPage } from '../map-modal/map-modal.page';
 import { HttpClient } from '@angular/common/http';
+import { UtilsService } from 'src/app/services/utils.service';
 
 @Component({
   selector: 'map-page',
@@ -23,25 +24,31 @@ export class MapPage {
   private markerDataMap: Map<string, any> = new Map();
   enseignes: any[] = [];
 
-  constructor(private modalCtrl: ModalController, private http: HttpClient) {}
+  constructor(private modalCtrl: ModalController, private http: HttpClient, private utilsService: UtilsService) {}
 
-  private getMarkerColor(category?: any): { r: number, g: number, b: number, a: number } {    
-    // Si category est une string (ancien format), la convertir en objet
-    const categoryName = typeof category === 'string' 
-      ? category 
-      : category?.nom?.toLowerCase() || 'default';
+//   private getMarkerColor(category?: any): { r: number, g: number, b: number, a: number } {    
+//     // Si category est une string (ancien format), la convertir en objet
+//     const categoryName = typeof category === 'string' 
+//       ? category 
+//       : category?.nom?.toLowerCase() || 'default';
 
-    switch (categoryName) {
-      case 'manger':
-      case 'boire': return { r: 255, g: 0, b: 0, a: 0.5 };      // Rouge
-      case 'sortir': return { r: 0, g: 255, b: 0, a: 0.5 };       // Vert
-      case 'travailler': return { r: 0, g: 0, b: 255, a: 0.5 };      // Bleu
-      case 'se cultiver': return { r: 255, g: 255, b: 0, a: 0.5 };    // Jaune
-      case "s'aérer": return { r: 255, g: 0, b: 255, a: 0.5 };    // Magenta
-      default:
-        return { r: 0, g: 0, b: 0, a: 0.5 };        // Noir par défaut
-    }
-}
+//     switch (categoryName) {
+//       case 'manger':
+//         return { r: 224, g: 152, b: 57, a: 0.8 };       // Orange
+//       case 'travailler':
+//         return { r: 207, g: 102, b: 126, a: 0.8 };      // Rose bordeaux
+//       case "s'aérer":
+//         return { r: 105, g: 157, b: 80, a: 0.8 };       // Vert
+//       case 'sortir':
+//         return { r: 0, g: 167, b: 191, a: 0.8 };        // Bleu cyan
+//       case 'se cultiver':
+//         return { r: 248, g: 232, b: 59, a: 0.8 };       // Jaune vif
+//       case 'boire':
+//         return { r: 110, g: 74, b: 131, a: 0.8 };       // Violet
+//       default:
+//         return { r: 128, g: 128, b: 128, a: 0.5 };      // Gris par défaut
+//     }
+// }
     
   ionViewDidEnter() {
     this.createMap();
@@ -74,7 +81,8 @@ export class MapPage {
       const markerId = e.id.toString();
       this.markerDataMap.set(markerId, e);
 
-      const markerColor = this.getMarkerColor(e.categories?.[0]);
+      //const markerColor = this.getMarkerColor(e.categories?.[0]);
+      const markerColor = this.utilsService.getCategoryColor(e.categories?.[0]);
 
         
         return {

@@ -5,6 +5,9 @@ import { IonicModule } from '@ionic/angular'
 import { CommonModule } from '@angular/common'
 import { UtilsService } from 'src/app/services/utils.service'
 import { MenuController } from '@ionic/angular'
+import { LoadingController } from '@ionic/angular'
+import { finalize } from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-enseignes',
@@ -19,6 +22,8 @@ export class EnseignesPage implements OnInit {
   favoris: number[] = []
   showFilterOptions = false
   selectedCriteres: string[] = []
+  categoryColor = ''
+  isLoading = true
 
   criteres = [
     { key: 'noteMoyenne', label: 'Note Moyenne' },
@@ -31,16 +36,84 @@ export class EnseignesPage implements OnInit {
     private router: Router,
     private enseigneService: EnseignesService,
     private utilsService: UtilsService,
-    private menuCtrl: MenuController
+    private menuCtrl: MenuController,
+    private utils: UtilsService,
+    private loadingCtrl: LoadingController,
+    
   ) {}
 
-  ngOnInit() {
-    this.categoryName = this.route.snapshot.paramMap.get('nom') || ''
-    this.enseigneService.getEnseignesByCategory(this.categoryName).subscribe((data: any) => {
-      this.enseignes = data.enseignes ?? data
-      this.favoris = data.favoris ?? []
-    })
+
+  async loadEnseignes() {
+    const loading = await this.loadingCtrl.create({
+      message: 'Chargement des enseignes...',
+      spinner: 'circles'
+    });
+  
+    await loading.present();
+  
+    this.enseigneService.getEnseignesByCategory(this.categoryName)
+      .pipe(finalize(() => loading.dismiss()))
+      .subscribe({
+        next: (data: any) => {
+          this.enseignes = data.enseignes ?? data;
+          this.favoris = data.favoris ?? [];
+          this.isLoading = false;
+        },
+        error: (err) => {
+          console.error('Erreur de chargement', err);
+          this.isLoading = false;
+        }
+      });
   }
+  
+  
+  
+  ngOnInit() {
+    this.categoryName = this.route.snapshot.paramMap.get('nom') || '';
+    const colorObj = this.utilsService.getCategoryColor(this.categoryName);
+    this.categoryColor = `rgba(${colorObj.r}, ${colorObj.g}, ${colorObj.b}, ${colorObj.a})`;
+  
+    this.loadEnseignes();
+  }
+  
+  
+
+
+  // async ngOnInit() {
+
+  //   const loading = await this.loadingCtrl.create({
+  //     message: 'Chargement des détails...',
+  //     spinner: 'circles'
+  //   });
+  //   await loading.present();
+  
+  //   this.categoryName = this.route.snapshot.paramMap.get('nom') || '';
+  //   const colorObj = this.utilsService.getCategoryColor(this.categoryName);
+  //   this.categoryColor = `rgba(${colorObj.r}, ${colorObj.g}, ${colorObj.b}, ${colorObj.a})`;
+  
+  //   this.enseigneService.getEnseignesByCategory(this.categoryName).subscribe((data: any) => {
+  //     this.enseignes = data.enseignes ?? data;
+  //     this.favoris = data.favoris ?? [];
+  //     // loading.dismiss();
+  //     // this.isLoading = false;
+  //   }, () => {
+  //     // loading.dismiss();
+  //     // this.isLoading = false;
+  //   });
+
+  // }
+  
+
+  // ngOnInit() {
+  //   this.categoryName = this.route.snapshot.paramMap.get('nom') || ''
+  //   const colorObj = this.utilsService.getCategoryColor(this.categoryName);
+  //   this.categoryColor = `rgba(${colorObj.r}, ${colorObj.g}, ${colorObj.b}, ${colorObj.a})`;
+    
+  //   this.enseigneService.getEnseignesByCategory(this.categoryName).subscribe((data: any) => {
+  //     this.enseignes = data.enseignes ?? data
+  //     this.favoris = data.favoris ?? []
+  //   })
+  // }
 
   openMenu() {
     this.menuCtrl.open('end');
@@ -87,8 +160,12 @@ export class EnseignesPage implements OnInit {
     })
   }
 
-  openInGoogleMaps(enseigne: any) {
-    this.utilsService.openInGoogleMaps(enseigne);
+  openInGoogleMaps(adresse: string) {
+    if (!adresse?.trim()) {
+      console.error('Adresse invalide')
+      return
+    }
+    this.utilsService.openInGoogleMaps(adresse);
   }
 
   goToExplore() {
@@ -105,5 +182,9 @@ export class EnseignesPage implements OnInit {
 
   toggleFilterOptions() {
     this.showFilterOptions = !this.showFilterOptions
+  }
+
+  goToEnseigneDetail(number: number) {
+    this.utils.goToEnseigneDetail(number);
   }
 }

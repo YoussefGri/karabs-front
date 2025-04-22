@@ -11,6 +11,7 @@ import { JwtInterceptor } from "./interceptors/jwt.interceptor"
 import { HomePage } from "./pages/home/home.page"
 import { NavbarComponent } from "./components/navbar/navbar.component"
 import { AuthInterceptor } from "./interceptors/auth.interceptor"
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 @NgModule({
   declarations: [AppComponent, HomePage],
@@ -21,6 +22,7 @@ import { AuthInterceptor } from "./interceptors/auth.interceptor"
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
 
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

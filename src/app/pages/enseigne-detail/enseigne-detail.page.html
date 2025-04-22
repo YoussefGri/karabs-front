@@ -1,0 +1,214 @@
+<ion-header class="ion-no-border custom-header">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/enseignes" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="shareEnseigneInfo()">
+        <ion-icon slot="icon-only" name="share-outline"></ion-icon>
+      </ion-button>
+      <ion-button fill="clear" (click)="toggleFavorite()">
+        <ion-icon slot="icon-only" [name]="isFavorite ? 'heart' : 'heart-outline'" [color]="isFavorite ? 'danger' : ''"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="krab-content">
+  <div class="loading-state" *ngIf="isLoading">
+    <ion-spinner name="circles"></ion-spinner>
+    <p>Chargement en cours...</p>
+  </div>
+  
+  <ng-container *ngIf="!isLoading && enseigne">
+    <div class="hero-container">
+      <div class="carousel-wrapper">
+        <div class="carousel-slides" [style.transform]="'translateX(' + (-currentSlide * 100) + '%)'">
+          <div class="carousel-slide" *ngFor="let image of enseigneImages; let i = index">
+            <img [src]="image" [alt]="'Photo ' + (i+1) + ' de ' + (enseigne?.nom || '')" class="hero-img" />
+          </div>
+        </div>
+
+        <div class="carousel-indicators">
+          <span *ngFor="let image of enseigneImages; let i = index" 
+                [class.active]="i === currentSlide"
+                (click)="goToSlide(i)"></span>
+        </div>
+
+        <button class="carousel-control prev" (click)="prevSlide()" *ngIf="enseigneImages.length > 1">
+          <ion-icon name="chevron-back-outline"></ion-icon>
+        </button>
+        <button class="carousel-control next" (click)="nextSlide()" *ngIf="enseigneImages.length > 1">
+          <ion-icon name="chevron-forward-outline"></ion-icon>
+        </button>
+      </div>
+
+      <div class="hero-gradient"></div>
+      <div class="hero-badge" *ngIf="enseigne?.noteMoyenne">
+        <ion-icon name="star" class="star-icon"></ion-icon>
+        <span>{{ enseigne?.noteMoyenne }}</span>
+      </div>
+      <div class="hero-title">
+        <h1>{{ enseigne?.nom }}</h1>
+        <span class="category">
+          <ion-icon [name]="getCategoryIcon(enseigne?.categorie)"></ion-icon>
+          {{ enseigne?.categorie || 'Restaurant' }}
+        </span>
+      </div>
+    </div>
+
+    <div class="main-card">
+      <div class="quick-actions">
+        <button class="action action-directions" (click)="openInGoogleMaps(enseigne.adresse)" title="Itinéraire">
+          <ion-icon name="navigate"></ion-icon>
+        </button>
+        <button class="action action-call" title="Appeler" (click)="openPhoneCall(enseigne)">
+            <ion-icon name="call"></ion-icon>
+                  </button>
+        <button class="action action-hours" (click)="showHoraires()" title="Horaires">
+          <ion-icon name="time"></ion-icon>
+        </button>
+        <button class="action action-website" *ngIf="enseigne?.website" (click)="navigateToEnseigneWebsite()" title="Site Web">
+          <ion-icon name="globe"></ion-icon>
+        </button>
+      </div>
+
+
+
+      <div class="section about">
+        <h2><ion-icon name="information-circle"></ion-icon> À propos</h2>
+        
+        <div class="key-points">
+          <ul class="points-list">
+            <li *ngIf="enseigne?.pointCle1">
+              <ion-icon name="checkmark-circle"></ion-icon>
+              <span>{{ enseigne?.pointCle1 }}</span>
+            </li>
+            <li *ngIf="enseigne?.pointCle2">
+              <ion-icon name="checkmark-circle"></ion-icon>
+              <span>{{ enseigne?.pointCle2 }}</span>
+            </li>
+            <li *ngIf="enseigne?.pointCle3">
+              <ion-icon name="checkmark-circle"></ion-icon>
+              <span>{{ enseigne?.pointCle3 }}</span>
+            </li>
+            <li *ngIf="!enseigne?.pointCle1 && !enseigne?.pointCle2 && !enseigne?.pointCle3" class="no-points">
+              <ion-icon name="information-circle-outline"></ion-icon>
+              <span>Aucun point clé disponible</span>
+            </li>
+          </ul>
+        </div>
+
+
+        <div class="description-section" *ngIf="enseigne?.description">
+        
+          <div class="description-card">
+            <div class="quote-icon">
+              <ion-icon name="document-text"></ion-icon>
+              <span>Description</span>
+            </div>
+        
+            <div class="description-content">
+              <p>{{ enseigne?.description }}</p>
+            </div>
+        
+            <div class="establishment-signature" *ngIf="enseigne?.nom">
+              <span>- {{ enseigne?.nom }}</span>
+            </div>
+          </div>
+        </div>
+        
+        
+        <div class="info-list">
+          <div class="info" *ngIf="enseigne?.adresse" (click)="openInGoogleMaps(enseigne.adresse)">
+            <ion-icon name="location"></ion-icon>
+            <span>{{ enseigne?.adresse }}</span>
+          </div>
+          <div class="info clickable" *ngIf="enseigne?.numeroTelephone && enseigne.numeroTelephone !== '+000'" (click)="openPhoneCall(enseigne)">
+            <ion-icon name="call"></ion-icon>
+            <span>{{ enseigne?.numeroTelephone }}</span>
+          </div>
+          <div class="info clickable" *ngIf="enseigne?.website" (click)="navigateToEnseigneWebsite()">
+            <ion-icon name="globe"></ion-icon>
+            <span>{{ enseigne?.website }}</span>
+          </div>
+          <div class="info" *ngIf="enseigne?.prixMoyen">
+            <ion-icon name="wallet"></ion-icon>
+            <span>{{ formatPrixMoyen(enseigne?.prixMoyen) }}</span>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="section ratings">
+        <h2><ion-icon name="star"></ion-icon> Notes & Avis</h2>
+        
+        <div class="ratings-detail">
+          <div class="rating-row">
+            <span class="rating-label">Prix</span>
+            <div class="rating-bar">
+              <div class="rating-fill" [style.width]="(enseigne?.notePrix || 0) * 20 + '%'"></div>
+            </div>
+            <span class="rating-value">{{ enseigne?.notePrix !== undefined ? (enseigne.notePrix | number:'1.1-1') : '?' }}/5</span>
+          </div>
+          <div class="rating-row">
+            <span class="rating-label">Qualité</span>
+            <div class="rating-bar">
+              <div class="rating-fill" [style.width]="(enseigne?.noteQualite || 0) * 20 + '%'"></div>
+            </div>
+            <span class="rating-value">{{ enseigne?.noteQualite !== undefined ? (enseigne.noteQualite | number:'1.1-1') : '?' }}/5</span>
+          </div>
+          <div class="rating-row">
+            <span class="rating-label">Ambiance</span>
+            <div class="rating-bar">
+              <div class="rating-fill" [style.width]="(enseigne?.noteAmbiance || 0) * 20 + '%'"></div>
+            </div>
+            <span class="rating-value">      {{ enseigne?.noteAmbiance !== undefined ? (enseigne.noteAmbiance | number:'1.1-1') : '?' }}/5
+            </span>
+          </div>
+        </div>
+        
+        <div class="badges">
+          <div class="badge community">
+            <div class="label">Communauté</div>
+            <div class="value">{{ enseigne?.noteMoyenne || '?' }}<span>/5</span></div>
+          </div>
+          <div class="badge google" *ngIf="enseigne?.noteGoogle">
+            <div class="label">Google</div>
+            <div class="value">{{ enseigne?.noteGoogle || '4.3' }}<span>/5</span></div>
+          </div>
+          <div class="badge acm" *ngIf="enseigne?.noteACM">
+            <div class="label">ACM</div>
+            <div class="value">{{ enseigne?.noteACM || '?' }}<span>/5</span></div>
+          </div>
+        </div>
+      </div>
+      
+<div class="section user-ratings">
+  <h2><ion-icon name="star"></ion-icon> Votre évaluation</h2>
+  
+  <div class="rating-categories">
+    <div class="rating-category" *ngFor="let category of ['prix', 'qualite', 'ambiance']">
+      <div class="rating-label">{{ ratingLabels[category] || 'Inconnu' }}</div>
+      <div class="star-rating" [class.disabled]="ratingInProgress">
+        <ion-icon 
+          *ngFor="let star of [1, 2, 3, 4, 5]" 
+          [name]="userRatings[category] >= star ? 'star' : 'star-outline'"
+          [color]="userRatings[category] >= star ? 'warning' : 'medium'"
+          (click)="rateEnseigne(category, star)">
+        </ion-icon>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+      <div class="report-section">
+        <button class="report-btn" (click)="reportIssue()">
+          <ion-icon name="alert-circle-outline"></ion-icon>
+          Signaler un problème
+        </button>
+      </div>
+    </div>
+  </ng-container>
+</ion-content>

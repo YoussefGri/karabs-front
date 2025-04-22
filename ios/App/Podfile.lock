@@ -17,6 +17,8 @@ PODS:
     - Capacitor
   - CapacitorKeyboard (7.0.0):
     - Capacitor
+  - CapacitorShare (7.0.1):
+    - Capacitor
   - CapacitorStatusBar (7.0.0):
     - Capacitor
   - Google-Maps-iOS-Utils (5.0.0):
@@ -37,6 +39,7 @@ DEPENDENCIES:
   - "CapacitorGoogleMaps (from `../../node_modules/@capacitor/google-maps`)"
   - "CapacitorHaptics (from `../../node_modules/@capacitor/haptics`)"
   - "CapacitorKeyboard (from `../../node_modules/@capacitor/keyboard`)"
+  - "CapacitorShare (from `../../node_modules/@capacitor/share`)"
   - "CapacitorStatusBar (from `../../node_modules/@capacitor/status-bar`)"
 
 SPEC REPOS:
@@ -62,6 +65,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/haptics"
   CapacitorKeyboard:
     :path: "../../node_modules/@capacitor/keyboard"
+  CapacitorShare:
+    :path: "../../node_modules/@capacitor/share"
   CapacitorStatusBar:
     :path: "../../node_modules/@capacitor/status-bar"
 
@@ -74,11 +79,12 @@ SPEC CHECKSUMS:
   CapacitorGoogleMaps: 92f9b1a5bf8c4d818833e7671953c83556b540f9
   CapacitorHaptics: 7be406a91e4eb87287f321c6c68e1709d6837b3a
   CapacitorKeyboard: 4db71e694e7afb5d7c0be09b05495c19f7d6c914
+  CapacitorShare: e573823f511f260f598d0423c33b1e3d7bbe5fd1
   CapacitorStatusBar: a8c4c83ed2e973bdafb979e80e4b00d027832cb7
   Google-Maps-iOS-Utils: 66d6de12be1ce6d3742a54661e7a79cb317a9321
   GoogleMaps: 8939898920281c649150e0af74aa291c60f2e77d
   IONGeolocationLib: 81f33f88d025846946de2cf63b0c7628e7c6bc9d
 
-PODFILE CHECKSUM: 6ded17e5fc4510e3bf26c2df23de662bb3a7ef18
+PODFILE CHECKSUM: 1bf88809cc496e65ef98ef1765fa5e96965c56c0
 
 COCOAPODS: 1.16.2
