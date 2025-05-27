@@ -14,7 +14,7 @@
   --radius: 22px;
   --radius-sm: 16px;
   --transition: all 0.2s ease;
-  --space: 16px;
+  --space: 10px;
 }
 
 /* Header amélioré */
@@ -812,6 +812,8 @@
     }
   }
 }
+
+
 .no-hours {
   display: flex;
   align-items: center;
@@ -955,4 +957,30 @@
 .krab-content {
   z-index: 0;
 }
+}
+
+.badges-toggle {
+  .badge {
+    cursor: pointer;
+    user-select: none;
+    transition: var(--transition);
+
+    &.active-acm {
+      border-top: 4px solid #00C853; // vert
+      background-color: #e8f5e9;
+
+      .value {
+        color: #00C853;
+      }
+    }
+
+    &.active-community {
+      border-top: 4px solid var(--primary); // rouge
+      background-color: #fff3f3;
+
+      .value {
+        color: var(--primary);
+      }
+    }
+  }
 }

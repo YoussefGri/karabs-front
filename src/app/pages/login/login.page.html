@@ -26,6 +26,10 @@
           <div class="forgot-password">
             <a href="register" class="right">S'inscrire</a>
           </div>
+
+          <div class="forgot-password">
+            <a href="reset-password" class="right">Mot de passe oublié ?</a>
+          </div>
           
           <ion-button expand="block" class="login-button" type="submit" color="danger">
             Se connecter
@@ -39,24 +43,11 @@
         </div>
 
         <div class="social-buttons">
-          <ion-button expand="block" color="secondary" class="facebook-button" (click)="loginWithProvider('facebook')">
-            <ion-icon name="logo-facebook"></ion-icon>
-            acebook
-          </ion-button>
-
           <ion-button expand="block" color="medium" class="google-button" (click)="loginWithProvider('google')">
             <ion-icon name="logo-google"></ion-icon>
             oogle
           </ion-button>
         </div>
-
-        <div class="social-buttons">
-          <ion-button color="light" fill="solid" class="apple-button" (click)="loginWithProvider('apple')">
-            <ion-icon name="logo-apple"></ion-icon>
-             Apple
-          </ion-button>
-        </div>
-
       </ion-card-content>
     </ion-card>
 

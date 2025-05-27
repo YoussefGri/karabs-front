@@ -31,7 +31,6 @@ ion-content {
 }
 
 
-// Logo
 .logo-container {
   display: flex;
   align-items: center; // Centre verticalement
@@ -109,7 +108,7 @@ ion-content {
   justify-content: center;
   margin-bottom: 10px;
   
-  .facebook-button, .google-button {
+.google-button, .invite-button {
     border-radius: 8px;
     width: 100%;
   }
@@ -127,6 +126,11 @@ ion-content {
   text-align: center;
   margin-top: 10px;
 }
+
+ion-button[ng-reflect-router-link='/home'] {
+  margin-top: 12px;
+}
+
 
 // // Variables globales
 // $primary-color: #b22222; // Rouge foncé

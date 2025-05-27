@@ -1,0 +1,54 @@
+ion-toolbar {
+  --background: #cc2128;
+  --color: white;
+}
+
+.about-container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+}
+
+.about-logo {
+  width: 100px;
+  margin: 20px auto;
+}
+
+.about-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-top: 10px;
+  color: #222;
+}
+
+.about-text {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #555;
+  margin-top: 20px;
+  text-align: justify;
+}
+
+ion-card {
+  margin-top: 30px;
+}
+
+.about-footer {
+  font-size: 14px;
+  color: #888;
+  margin-top: 40px;
+}
+
+ion-card-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #222;
+}
+
+ion-label {
+  font-size: 15px;
+  color: #444;
+  line-height: 1.5;
+}
+

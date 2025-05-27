@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EnseignesService } from '../../services/enseignes.service';
 import { IonicModule } from '@ionic/angular';
@@ -11,12 +11,19 @@ import { HorairesModalComponent } from '../../components/horaires-modal/horaires
 import { FormsModule } from '@angular/forms';
 import { UtilsService } from 'src/app/services/utils.service';
 
+interface Ratings {
+  prix: number;
+  qualite: number;
+  ambiance: number;
+}
+
 @Component({
   selector: 'app-enseigne-detail',
   templateUrl: './enseigne-detail.page.html',
   styleUrls: ['./enseigne-detail.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [IonicModule, CommonModule, FormsModule], 
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class EnseigneDetailPage implements OnInit, OnDestroy {
   enseigne: any = {}; 
@@ -25,18 +32,127 @@ export class EnseigneDetailPage implements OnInit, OnDestroy {
   enseigneImages: string[] = [];
   currentSlide = 0;
   autoplayInterval: Subscription | null = null;
-  
-  userRatings: { [key: string]: number } = {
-    'prix': 0,
-    'qualite': 0,
-    'ambiance': 0
-  };
+  mode: 'acm' | 'community' = 'acm';
+
   
   ratingLabels: { [key: string]: string } = {
     'prix': 'Prix',
     'qualite': 'Qualité', 
     'ambiance': 'Ambiance'
   };
+
+  pendingRatings: Ratings = {
+    prix: 0,
+    qualite: 0,
+    ambiance: 0
+  };
+  
+  get ratingCategories(): (keyof Ratings)[] {
+    return ['prix', 'qualite', 'ambiance'];
+  }
+
+  setMode(mode: 'acm' | 'community') {
+    this.mode = mode;
+  }
+
+  getRating(category: keyof Ratings): number {
+    if (!this.enseigne) return 0;
+  
+    if (this.mode === 'acm') {
+      return this.enseigne.noteACM?.[category] || 0;
+    }
+  
+    return this.enseigne[`note${category.charAt(0).toUpperCase() + category.slice(1)}`] || 0;
+  }
+
+  getMoyenneACM(): string {
+    if (!this.enseigne || !this.enseigne.noteACM) return '0.0';
+    const notes = Object.values(this.enseigne.noteACM).filter(n => typeof n === 'number') as number[];
+    if (!notes.length) return '0.0';
+    const moyenne = notes.reduce((acc, val) => acc + val, 0) / notes.length;
+    return moyenne.toFixed(1);
+  }
+  
+
+  isRatingComplete(): boolean {
+    return Object.values(this.pendingRatings).every(r => r > 0);
+  }
+
+  setPendingRating(category: keyof Ratings, rating: number): void {
+    if (this.ratingInProgress) return;
+    this.pendingRatings[category] = rating;
+  }
+
+  // Pour la méthode submitRatings dans enseigne-detail.page.ts
+async submitRatings() {
+  if (!this.enseigne?.id || !this.isRatingComplete()) return;
+  
+  this.ratingInProgress = true;
+  const loading = await this.loadingCtrl.create({
+    message: 'Envoi de votre évaluation...',
+    spinner: 'circles'
+  });
+  await loading.present();
+  
+  // Envoyer toutes les notes en une fois
+  const ratings: Ratings = {
+    prix: this.pendingRatings.prix,
+    qualite: this.pendingRatings.qualite,
+    ambiance: this.pendingRatings.ambiance
+  };
+  
+  this.enseigneService.rateEnseigne(this.enseigne.id, ratings)
+    .pipe(finalize(() => { loading.dismiss(); this.ratingInProgress = false; }))
+    .subscribe({
+      next: updated => {
+        console.log('Réponse du serveur après notation:', updated);
+        
+        // Mise à jour complète des données avec debug
+        if (updated) {
+          console.log('Notes avant mise à jour:', {
+            prix: this.enseigne.notePrix,
+            qualite: this.enseigne.noteQualite,
+            ambiance: this.enseigne.noteAmbiance,
+            acm: this.enseigne.noteACM
+          });
+          
+          // Mise à jour explicite des champs nécessaires
+          this.enseigne = { 
+            ...this.enseigne, 
+            notePrix: updated.notePrix || this.enseigne.notePrix,
+            noteQualite: updated.noteQualite || this.enseigne.noteQualite,
+            noteAmbiance: updated.noteAmbiance || this.enseigne.noteAmbiance,
+            noteACM: updated.noteACM || this.enseigne.noteACM,
+            noteMoyenne:  updated.noteMoyenne
+          };
+          
+          console.log('Notes après mise à jour:', {
+            prix: this.enseigne.notePrix,
+            qualite: this.enseigne.noteQualite,
+            ambiance: this.enseigne.noteAmbiance,
+            acm: this.enseigne.noteACM
+          });
+        }
+        
+        this.resetPendingRatings();
+        this.showToast('Évaluation enregistrée !');
+      },
+      error: err => {
+        console.error('Erreur HTTP status:', err.status);
+        console.error('Corps de la réponse:', err.error);
+        this.showToast(err.error?.message || 'Erreur lors de l\'envoi de l\'évaluation', 'danger');
+      }
+    });
+}
+
+
+  private resetPendingRatings(): void {
+    this.pendingRatings = { prix: 0, qualite: 0, ambiance: 0 };
+  }
+
+  trackByCategory(index: number, category: string): string {
+    return category;
+  }
   
   ratingInProgress = false;
   
@@ -86,7 +202,7 @@ export class EnseigneDetailPage implements OnInit, OnDestroy {
       });
   }
   
-  
+  // Le reste du code reste inchangé...
   
   ngOnDestroy() {
     this.stopAutoplay();
@@ -117,16 +233,14 @@ export class EnseigneDetailPage implements OnInit, OnDestroy {
       this.enseigne.slogan = '';
     }
   }
-  
+
   private setupCarousel() {
-    if (this.enseigne.images && Array.isArray(this.enseigne.images) && this.enseigne.images.length > 0) {
+    if (Array.isArray(this.enseigne.images) && this.enseigne.images.length > 0) {
       this.enseigneImages = this.enseigne.images;
+    } else if (this.enseigne.photo) {
+      this.enseigneImages = [this.enseigne.photo];
     } else {
-      this.enseigneImages = [
-        'assets/default.jpg',
-        'assets/default.jpg',
-        'assets/default.jpg'
-      ];
+      this.enseigneImages = ['assets/default.jpg'];
     }
   }
   
@@ -163,45 +277,6 @@ export class EnseigneDetailPage implements OnInit, OnDestroy {
   resetAutoplayTimer() {
     this.stopAutoplay();
     this.startAutoplay();
-  }
-  
-  async rateEnseigne(category: string, rating: number) {
-    if (!this.enseigne?.id) return;
-    
-    this.ratingInProgress = true;
-    this.userRatings[category] = rating;
-    
-    const loading = await this.loadingCtrl.create({
-      message: 'Enregistrement de votre note...',
-      spinner: 'circles',
-      duration: 2000
-    });
-    await loading.present();
-    
-    this.enseigneService.rateEnseigne(this.enseigne.id, category, rating)
-      .pipe(
-        finalize(() => {
-          loading.dismiss();
-          this.ratingInProgress = false;
-        })
-      )
-      .subscribe({
-        next: (updatedEnseigne: any) => {
-          if (updatedEnseigne) {
-            if (category === 'prix') this.enseigne.notePrix = updatedEnseigne.notePrix || this.enseigne.notePrix;
-            if (category === 'qualite') this.enseigne.noteQualite = updatedEnseigne.noteQualite || this.enseigne.noteQualite;
-            if (category === 'ambiance') this.enseigne.noteAmbiance = updatedEnseigne.noteAmbiance || this.enseigne.noteAmbiance;
-            
-            this.enseigne.noteMoyenne = Math.round(((this.enseigne.notePrix + this.enseigne.noteQualite + this.enseigne.noteAmbiance) / 3) * 10) / 10;
-          }
-          this.showToast(`Note ${this.ratingLabels[category]} enregistrée`);
-        },
-        error: (err: any) => {
-          console.error('Erreur lors de la notation:', err);
-          this.handleError('Impossible d\'enregistrer votre note');
-          this.userRatings[category] = 0;
-        }
-      });
   }
   
   getStarsArray(count: number): number[] {
@@ -245,39 +320,12 @@ export class EnseigneDetailPage implements OnInit, OnDestroy {
   }
   
   async openInGoogleMaps(adresse: string) {
-
-      if (!adresse) {
-        console.error('L\'adresse est invalide.');
-        this.showToast('Aucune localisation disponible', 'warning');
-        return;
-      }
-      this.utilsService.openInGoogleMaps(adresse);
-
-   // if (!this.enseigne) return;
-    
-    // try {
-    //   let query: string;
-      
-    //   if (this.enseigne.gpsLocation) {
-    //     query = this.enseigne.gpsLocation;
-    //   } else if (this.enseigne.adresse) {
-    //     query = encodeURIComponent(this.enseigne.adresse);
-    //   } else {
-    //     this.showToast('Aucune localisation disponible', 'warning');
-    //     return;
-    //   }
-      
-    //   const url = `https://www.google.com/maps/search/?api=1&query=${query}`;
-      
-    //   if ((window as any).cordova?.InAppBrowser) {
-    //     (window as any).cordova.InAppBrowser.open(url, '_system');
-    //   } else {
-    //     window.open(url, '_blank');
-    //   }
-    // } catch (error) {
-    //   console.error('Erreur Google Maps:', error);
-    //   this.handleError('Impossible d\'ouvrir la carte');
-    // }
+    if (!adresse) {
+      console.error('L\'adresse est invalide.');
+      this.showToast('Aucune localisation disponible', 'warning');
+      return;
+    }
+    this.utilsService.openInGoogleMaps(adresse);
   }
   
   openPhoneCall(enseigne: any) {
@@ -336,19 +384,19 @@ export class EnseigneDetailPage implements OnInit, OnDestroy {
       });
   }
 
-private async openHorairesModal() {
-  const modal = await this.modalCtrl.create({
-    component: HorairesModalComponent,
-    componentProps: {
-      enseigne: this.enseigne,
-      horaires: this.enseigne.horaires
-    },
-    cssClass: 'horaires-modal',
-    breakpoints: [0, 0.8],
-    initialBreakpoint: 0.8
-  });
-  await modal.present();
-}
+  private async openHorairesModal() {
+    const modal = await this.modalCtrl.create({
+      component: HorairesModalComponent,
+      componentProps: {
+        enseigne: this.enseigne,
+        horaires: this.enseigne.horaires
+      },
+      cssClass: 'horaires-modal',
+      breakpoints: [0, 0.8],
+      initialBreakpoint: 0.8
+    });
+    await modal.present();
+  }
   
   getCategoryIcon(category: string): string {
     const icons: Record<string, string> = {
@@ -430,4 +478,3 @@ private async openHorairesModal() {
     this.showToast('Signalement envoyé avec succès');
   }
 }
-    

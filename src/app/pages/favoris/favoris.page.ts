@@ -8,7 +8,7 @@ import { UtilsService } from 'src/app/services/utils.service';
 @Component({
   selector: 'app-favoris',
   templateUrl: './favoris.page.html',
-  styleUrls: ['../enseignes/enseignes.page.scss'],
+  styleUrls: ['./favoris.page.scss'],
   standalone: true,
   imports: [IonicModule, CommonModule],
 })
@@ -29,7 +29,7 @@ export class FavorisPage implements OnInit {
   }
 
   openInGoogleMaps(enseigne: any) {
-    this.utils.openInGoogleMaps(enseigne.gpsLocation || enseigne.adresse);
+    this.utils.openInGoogleMaps(enseigne.adresse);
   }
 
   goToExplore() {

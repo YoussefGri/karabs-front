@@ -9,7 +9,12 @@ import { AuthService } from './auth.service';
 import { HttpHeaders } from '@angular/common/http';
 import { throwError } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
+interface Ratings {
+  prix: number;
+  qualite: number;
+  ambiance: number;
 
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -127,28 +132,64 @@ export class EnseignesService {
     );
   }
 
-  rateEnseigne(enseigneId: number, category: string, rating: number): Observable<any> {
-    return of(this.authService.getToken()).pipe(
-      switchMap(token => {
-        if (!token) {
-          return throwError(() => new Error('Token non disponible'));
-        }
-        
-        const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-        return this.http.post(`${this.apiUrl}/enseignes/${enseigneId}/rate`, 
-          { category, rating }, 
-          { headers }
-        ).pipe(
-          catchError(error => {
-            console.error('Erreur lors de la notation:', error);
-            return throwError(() => error);
-          })
-        );
-      })
-    );
+
+  // Pour la méthode rateEnseigne dans enseignes.service.ts
+rateEnseigne(id: number, ratings: Ratings): Observable<any> {
+  return of(this.authService.getToken()).pipe(
+    switchMap(token => {
+      if (!token) {
+        return throwError(() => new Error('Utilisateur non authentifié'));
+      }
+      
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      });
+      
+      console.log('Envoi des notations:', ratings);
+      
+      // Vérification des données à envoyer
+      if (!ratings.prix || !ratings.qualite || !ratings.ambiance) {
+        console.warn('Attention: Valeurs de notation incomplètes', ratings);
+      }
+      
+      return this.http.post(`${this.apiUrl}/enseignes/${id}/rate`, ratings, { 
+        headers,
+        observe: 'response'  // Pour capturer la réponse complète avec les headers
+      }).pipe(
+        tap(response => {
+          console.log('Réponse brute du serveur:', response);
+          console.log('Statut HTTP:', response.status);
+          console.log('Corps de la réponse:', response.body);
+        }),
+        map(response => {
+          // S'assurer que le body contient les données attendues
+  const body = (response.body || {}) as any;
+          
+          // Vérifier si les données essentielles sont présentes
+          if (!body.notePrix && !body.noteQualite && !body.noteAmbiance && !body.noteACM) {
+            console.warn('La réponse ne contient pas les notes attendues');
+          }
+          
+          return body;
+        })
+      );
+    }),
+    catchError(error => {
+      console.error('Erreur lors de l\'envoi des notations:', error);
+      
+      // Log détaillé de l'erreur
+      if (error.error) {
+        console.error('Détail de l\'erreur:', error.error);
+      }
+      if (error.status) {
+        console.error('Status code:', error.status);
+      }
+      
+      return throwError(() => error);
+    })
+  );
   }
-
-
 
 
 

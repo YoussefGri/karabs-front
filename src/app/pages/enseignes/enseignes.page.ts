@@ -7,6 +7,7 @@ import { UtilsService } from 'src/app/services/utils.service'
 import { MenuController } from '@ionic/angular'
 import { LoadingController } from '@ionic/angular'
 import { finalize } from 'rxjs/operators';
+import { CategorieService } from 'src/app/services/categorie.service'
 
 
 @Component({
@@ -39,7 +40,7 @@ export class EnseignesPage implements OnInit {
     private menuCtrl: MenuController,
     private utils: UtilsService,
     private loadingCtrl: LoadingController,
-    
+    private categorieService: CategorieService
   ) {}
 
 
@@ -57,6 +58,14 @@ export class EnseignesPage implements OnInit {
         next: (data: any) => {
           this.enseignes = data.enseignes ?? data;
           this.favoris = data.favoris ?? [];
+          
+          const cat = this.enseignes[0]?.categorie;
+          console.log('Catégorie:', cat);
+          if (cat && cat.couleur) {
+            const colorObj = this.utilsService.getCategoryColor(cat);
+            this.categoryColor = `rgba(${colorObj.r}, ${colorObj.g}, ${colorObj.b}, ${colorObj.a})`;
+          }
+
           this.isLoading = false;
         },
         error: (err) => {
@@ -68,52 +77,35 @@ export class EnseignesPage implements OnInit {
   
   
   
-  ngOnInit() {
-    this.categoryName = this.route.snapshot.paramMap.get('nom') || '';
-    const colorObj = this.utilsService.getCategoryColor(this.categoryName);
-    this.categoryColor = `rgba(${colorObj.r}, ${colorObj.g}, ${colorObj.b}, ${colorObj.a})`;
-  
-    this.loadEnseignes();
-  }
-  
-  
-
-
-  // async ngOnInit() {
-
-  //   const loading = await this.loadingCtrl.create({
-  //     message: 'Chargement des détails...',
-  //     spinner: 'circles'
-  //   });
-  //   await loading.present();
-  
+  // ngOnInit() {
   //   this.categoryName = this.route.snapshot.paramMap.get('nom') || '';
   //   const colorObj = this.utilsService.getCategoryColor(this.categoryName);
   //   this.categoryColor = `rgba(${colorObj.r}, ${colorObj.g}, ${colorObj.b}, ${colorObj.a})`;
   
-  //   this.enseigneService.getEnseignesByCategory(this.categoryName).subscribe((data: any) => {
-  //     this.enseignes = data.enseignes ?? data;
-  //     this.favoris = data.favoris ?? [];
-  //     // loading.dismiss();
-  //     // this.isLoading = false;
-  //   }, () => {
-  //     // loading.dismiss();
-  //     // this.isLoading = false;
-  //   });
-
+  //   this.loadEnseignes();
   // }
+
+  ngOnInit() {
+    this.categoryName = this.route.snapshot.paramMap.get('nom') || '';
+    this.loadEnseignes();
   
-
-  // ngOnInit() {
-  //   this.categoryName = this.route.snapshot.paramMap.get('nom') || ''
-  //   const colorObj = this.utilsService.getCategoryColor(this.categoryName);
-  //   this.categoryColor = `rgba(${colorObj.r}, ${colorObj.g}, ${colorObj.b}, ${colorObj.a})`;
-    
-  //   this.enseigneService.getEnseignesByCategory(this.categoryName).subscribe((data: any) => {
-  //     this.enseignes = data.enseignes ?? data
-  //     this.favoris = data.favoris ?? []
-  //   })
-  // }
+    console.log('Category Name:', this.categoryName);
+    // Si aucune enseigne, on va chercher la couleur manuellement
+    this.categorieService.getCategorieByNom(this.categoryName).subscribe({
+      next: (cat: any) => {
+        if (cat?.couleur) {
+          const colorObj = this.utilsService.getCategoryColor(cat);
+          this.categoryColor = `rgba(${colorObj.r}, ${colorObj.g}, ${colorObj.b}, ${colorObj.a})`;
+        }
+      },
+      error: () => {
+        console.warn('Catégorie sans couleur ou introuvable');
+      }
+    });
+  }
+  
+  
+  
 
   openMenu() {
     this.menuCtrl.open('end');
@@ -177,7 +169,8 @@ export class EnseignesPage implements OnInit {
   }
 
   capitalizeFirstLetter(str: string): string {
-    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
+    const decoded = decodeURIComponent(str);
+    return decoded.charAt(0).toUpperCase() + decoded.slice(1).toLowerCase()
   }
 
   toggleFilterOptions() {
@@ -186,5 +179,10 @@ export class EnseignesPage implements OnInit {
 
   goToEnseigneDetail(number: number) {
     this.utils.goToEnseigneDetail(number);
+  }
+
+  getStarIcon(note: number, position: number): string {
+
+    return this.utilsService.getStarIcon(note, position);             
   }
 }

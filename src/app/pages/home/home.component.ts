@@ -1,6 +1,5 @@
-import { Component, OnInit, ViewChild, AfterViewInit, ElementRef, NgZone, OnDestroy, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, ElementRef, NgZone, OnDestroy, HostListener, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
 import { register } from 'swiper/element';
 import { EnseignesService } from '../../services/enseignes.service';
 import { catchError, finalize, of, Subscription } from 'rxjs';
@@ -8,6 +7,9 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { timeout, retry, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { CommonModule } from '@angular/common';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 // Typage pour SwiperContainer
 interface EnseigneResponse {
@@ -34,11 +36,14 @@ register();
 
 @Component({
   selector: 'app-home',
-  templateUrl: './home.page.html',
-  styleUrls: ['./home.page.scss'],
-  standalone: false
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.scss'], 
+  imports: [CommonModule],
+schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class HomePage implements OnInit, AfterViewInit, OnDestroy {
+
+
+export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('swiper') swiperElement?: ElementRef<SwiperContainer>;
 
   user: any = null;
@@ -72,17 +77,33 @@ export class HomePage implements OnInit, AfterViewInit, OnDestroy {
       this.user = user;
     });
     this.subscriptions.push(userSub);
-
+  
     this.detectDeviceType();
     this.loadRandomEnseignes();
-  }
+  
+    // ⬇ Rafraîchissement complet si on revient sur cette page
+    const navSub = this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe(() => {
+        // Important : attendre que la vue soit prête
+        setTimeout(() => {
+          this.detectDeviceType();
+          this.loadRandomEnseignes(); // recharge des données
+          setTimeout(() => {
+            this.initializeSwiper(); // réinit swiper
+            this.applyActiveCardClass(); // réappliquer effet
+          }, 150);
+        }, 50); // petit délai pour laisser le DOM respirer
+      });
+    this.subscriptions.push(navSub);
+  }  
 
   detectDeviceType(): void {
     this.isMobile = window.innerWidth < 768;
     if (this.swiper) {
       if (!this.isMobile) {
         // Paramètres spécifiques pour desktop
-        this.swiper.params.slidesPerView = 1.5;
+        this.swiper.params.slidesPerView = 1;
         this.swiper.params.spaceBetween = 20;
       } else {
         // Paramètres pour mobile

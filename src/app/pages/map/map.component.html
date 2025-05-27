@@ -1,0 +1,40 @@
+<ion-header translucent>
+  <ion-toolbar color="danger">
+    <ion-title>Carte des enseignes</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen>
+  <div id="mapId"></div>
+
+  <div class="map-overlay" *ngIf="showOverlay && selectedEnseigne" @fadeSlide>
+    <button class="close-btn" (click)="showOverlay = false">✖</button>
+  <div class="handle"></div>
+  <h2>{{ selectedEnseigne.nom }}</h2>
+
+  <div class="stars">
+    <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
+      <ion-icon
+        [name]="getStarIcon(selectedEnseigne.noteMoyenne, star)"
+        class="star-icon">
+      </ion-icon>
+    </ng-container> 
+  </div>
+
+  <div class="tags">
+    <span class="tag" *ngIf="selectedEnseigne.categories?.length">{{ selectedEnseigne.categories[0].nom }}</span>
+  </div>
+
+  <div class="buttons">
+    <button class="go-btn" (click)="goTo(selectedEnseigne)">📍 Y ALLER</button>
+    <button class="call-btn" (click)="call(selectedEnseigne.numeroTelephone)">📞 APPELER</button>
+  </div>
+  <div class="enseigne-image" *ngIf="selectedEnseigne?.photo">
+    <img
+    [src]="selectedEnseigne.photo || 'assets/travailler.jpg'"
+    alt="{{ selectedEnseigne.nom }}"
+    (error)="onImageError($event)"
+  />  
+    </div>  
+</div>
+</ion-content>

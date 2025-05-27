@@ -94,7 +94,7 @@
             </ion-button>
           </div>
 
-          <p class="enseigne-category">{{ enseigne.categorie }}</p>
+          <p class="enseigne-category">{{ enseigne.categorie.nom }}</p>
           <p class="enseigne-slogan" (click)="goToEnseigneDetail(enseigne.id)">{{ enseigne.slogan }}</p>
 
           <div class="enseigne-info">
@@ -109,12 +109,12 @@
 
           <div class="card-footer">
             <div class="stars">
-              <ng-container *ngFor="let star of [1,2,3,4,5]">
+              <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
                 <ion-icon
-                  [name]="enseigne.noteMoyenne >= star ? 'star' : enseigne.noteMoyenne >= star - 0.5 ? 'star-half' : 'star-outline'"
-                  class="star-icon"
-                ></ion-icon>
-              </ng-container>
+                  [name]="getStarIcon(enseigne.noteMoyenne, star)"
+                  class="star-icon">
+                </ion-icon>
+              </ng-container> 
               <span class="note">({{ enseigne.noteMoyenne }})</span>
             </div>
           </div>

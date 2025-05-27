@@ -63,8 +63,8 @@
           <ion-icon name="navigate"></ion-icon>
         </button>
         <button class="action action-call" title="Appeler" (click)="openPhoneCall(enseigne)">
-            <ion-icon name="call"></ion-icon>
-                  </button>
+          <ion-icon name="call"></ion-icon>
+        </button>
         <button class="action action-hours" (click)="showHoraires()" title="Horaires">
           <ion-icon name="time"></ion-icon>
         </button>
@@ -72,8 +72,6 @@
           <ion-icon name="globe"></ion-icon>
         </button>
       </div>
-
-
 
       <div class="section about">
         <h2><ion-icon name="information-circle"></ion-icon> À propos</h2>
@@ -99,9 +97,7 @@
           </ul>
         </div>
 
-
         <div class="description-section" *ngIf="enseigne?.description">
-        
           <div class="description-card">
             <div class="quote-icon">
               <ion-icon name="document-text"></ion-icon>
@@ -117,7 +113,6 @@
             </div>
           </div>
         </div>
-        
         
         <div class="info-list">
           <div class="info" *ngIf="enseigne?.adresse" (click)="openInGoogleMaps(enseigne.adresse)">
@@ -139,11 +134,10 @@
         </div>
       </div>
 
-
       <div class="section ratings">
         <h2><ion-icon name="star"></ion-icon> Notes & Avis</h2>
         
-        <div class="ratings-detail">
+        <!-- <div class="ratings-detail">
           <div class="rating-row">
             <span class="rating-label">Prix</span>
             <div class="rating-bar">
@@ -163,45 +157,94 @@
             <div class="rating-bar">
               <div class="rating-fill" [style.width]="(enseigne?.noteAmbiance || 0) * 20 + '%'"></div>
             </div>
-            <span class="rating-value">      {{ enseigne?.noteAmbiance !== undefined ? (enseigne.noteAmbiance | number:'1.1-1') : '?' }}/5
-            </span>
+            <span class="rating-value">{{ enseigne?.noteAmbiance !== undefined ? (enseigne.noteAmbiance | number:'1.1-1') : '?' }}/5</span>
+          </div>
+        </div> -->
+
+        <div class="ratings-detail">
+          <div class="rating-row" *ngFor="let cat of ratingCategories">
+            <span class="rating-label">{{ ratingLabels[cat] }}</span>
+            <div class="rating-bar">
+              <div class="rating-fill" 
+                   [style.width]="getRating(cat) * 20 + '%'" 
+                   [style.background]="mode === 'acm' ? 'green' : 'crimson'"></div>
+            </div>
+            <span class="rating-value">{{ getRating(cat) }}/5</span>
+          </div>          
+        </div>
+
+        <div class="badges badges-toggle">
+          <div 
+            class="badge" 
+            [ngClass]="{ 'active-acm': mode === 'acm' }" 
+            (click)="setMode('acm')">
+            <div class="label">ACM</div>
+            <div class="value">{{ getMoyenneACM() }}<span>/5</span></div>
+          </div>
+        
+          <div 
+            class="badge" 
+            [ngClass]="{ 'active-community': mode === 'community' }" 
+            (click)="setMode('community')">
+            <div class="label">Communauté</div>
+            <div class="value">{{ enseigne?.noteMoyenne || '0.0' }}<span>/5</span></div>
           </div>
         </div>
         
-        <div class="badges">
+        
+        <!-- <div class="badges">  
           <div class="badge community">
             <div class="label">Communauté</div>
             <div class="value">{{ enseigne?.noteMoyenne || '?' }}<span>/5</span></div>
-          </div>
-          <div class="badge google" *ngIf="enseigne?.noteGoogle">
+          </div> -->
+          <!-- <div class="badge google" *ngIf="enseigne?.noteGoogle">
             <div class="label">Google</div>
             <div class="value">{{ enseigne?.noteGoogle || '4.3' }}<span>/5</span></div>
-          </div>
+          </div> -->
+          <!--
           <div class="badge acm" *ngIf="enseigne?.noteACM">
             <div class="label">ACM</div>
-            <div class="value">{{ enseigne?.noteACM || '?' }}<span>/5</span></div>
-          </div>
-        </div>
+            <div class="value">{{getMoyenneACM()}}<span>/5</span></div>
+          </div> -->
+        <!--</div> -->
       </div>
       
-<div class="section user-ratings">
-  <h2><ion-icon name="star"></ion-icon> Votre évaluation</h2>
-  
-  <div class="rating-categories">
-    <div class="rating-category" *ngFor="let category of ['prix', 'qualite', 'ambiance']">
-      <div class="rating-label">{{ ratingLabels[category] || 'Inconnu' }}</div>
-      <div class="star-rating" [class.disabled]="ratingInProgress">
-        <ion-icon 
-          *ngFor="let star of [1, 2, 3, 4, 5]" 
-          [name]="userRatings[category] >= star ? 'star' : 'star-outline'"
-          [color]="userRatings[category] >= star ? 'warning' : 'medium'"
-          (click)="rateEnseigne(category, star)">
-        </ion-icon>
+      <!-- Section de notation utilisateur simplifiée -->
+      <div class="section user-ratings">
+        <h2><ion-icon name="star"></ion-icon> Votre évaluation</h2>
+        
+        <div class="rating-card">
+          <!-- Boucle unique pour afficher les trois catégories de notation -->
+          <ion-grid>
+            <ion-row *ngFor="let cat of ratingCategories">
+              <ion-col size="4">
+                <ion-label>{{ ratingLabels[cat] }}</ion-label>
+              </ion-col>
+              <ion-col size="8">
+                <div class="star-rating">
+                  <ion-button *ngFor="let star of [1,2,3,4,5]" 
+                              fill="clear" 
+                              size="small"
+                              (click)="setPendingRating(cat, star)">
+                    <ion-icon 
+                      [name]="pendingRatings[cat] >= star ? 'star' : 'star-outline'"
+                      [color]="pendingRatings[cat] >= star ? 'warning' : 'medium'">
+                    </ion-icon>
+                  </ion-button>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+      
+        <ion-button 
+          expand="block" 
+          [disabled]="!isRatingComplete() || ratingInProgress"
+          (click)="submitRatings()">
+          <ion-spinner *ngIf="ratingInProgress"></ion-spinner>
+          <span *ngIf="!ratingInProgress">Envoyer l'évaluation</span>
+        </ion-button>
       </div>
-    </div>
-  </div>
-</div>
-
 
       <div class="report-section">
         <button class="report-btn" (click)="reportIssue()">

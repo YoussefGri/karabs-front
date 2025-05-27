@@ -49,32 +49,39 @@ export class UtilsService {
     window.open(`tel:${tel}`, '_system')
   }
 
-  getCategoryColor(category?: any): { r: number, g: number, b: number, a: number } {    
-    // Si category est une string (ancien format), la convertir en objet
-    const categoryName = typeof category === 'string' 
-      ? category 
-      : category?.nom?.toLowerCase() || 'default';
-
-    switch (categoryName) {
-      case 'manger':
-        return {r: 224, g: 152, b: 57, a: 1};      
-      case 'boire':
-        return { r: 207, g: 102, b: 126, a: 1 };      
-      case "s\'aérer":
-        return { r:0, g: 167, b: 191, a: 1 };        
-      case 'sortir':
-        return { r: 105, g: 157, b: 80, a: 1 };       
-      case 'travailler':
-        return { r: 248, g: 232, b: 59, a: 1 };       
-      case 'se cultiver':
-        return { r: 110, g: 74, b: 131, a: 1 };       
-      default:
-        return { r: 255, g: 0, b: 0, a: 1 };      
-    }
+  getCategoryColor(category?: any): { r: number, g: number, b: number, a: number } {
+    const hex = typeof category === 'string'
+      ? undefined
+      : category?.couleur || '#FF0000'; // fallback rouge
+  
+    return this.hexToRgba(hex);
   }
+  
+  hexToRgba(hex: string, alpha = 1): { r: number; g: number; b: number; a: number } {
+    const sanitized = hex.replace('#', '');
+    const bigint = parseInt(sanitized, 16);
+  
+    if (sanitized.length === 6) {
+      const r = (bigint >> 16) & 255;
+      const g = (bigint >> 8) & 255;
+      const b = bigint & 255;
+      return { r, g, b, a: alpha };
+    }
+  
+    // fallback si hex invalide
+    return { r: 255, g: 0, b: 0, a: alpha };
+  }
+  
 
   goToEnseigneDetail(number: number) {
     this.router.navigate(['/enseigne', number]);
   }
   
+  getStarIcon(note: number, position: number): string {
+    const diff = note - (position - 1);
+
+    if (diff >= 0.8) return 'star';       
+    if (diff >= 0.3) return 'star-half';  
+    return 'star-outline';                
+  }
 }

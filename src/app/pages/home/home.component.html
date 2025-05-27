@@ -1,0 +1,23 @@
+<ion-header class="mobile-welcome-header karabs-header">
+  <div class="welcome-container">
+    <img src="assets/logo.png" alt="Karabs Logo" class="karabs-logo" />
+    <span class="welcome-text">Bienvenue dans l'accueil du Karabs</span>
+  </div>
+</ion-header>
+
+<ion-content>
+<section class="carousel-container">
+  <swiper-container #swiper>
+    <swiper-slide *ngFor="let enseigne of enseignes">
+      <div class="card" (click)="navigateToEnseigne(enseigne.id)">
+        <img [src]="enseigne.image" [alt]="enseigne.name" class="card-img" />
+        <div class="card-content">
+          <h3>{{ enseigne.name }}</h3>
+          <p class="slogan">{{ enseigne.slogan }}</p>
+          <div class="rating">⭐ {{ enseigne.rating || '—' }}/5</div>
+        </div>
+      </div>
+    </swiper-slide>
+  </swiper-container>
+</section>
+</ion-content>

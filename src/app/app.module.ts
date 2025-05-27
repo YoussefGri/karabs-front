@@ -4,18 +4,17 @@ import { RouteReuseStrategy } from "@angular/router"
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http"
 
 import { IonicModule, IonicRouteStrategy } from "@ionic/angular"
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from "./app.component"
 import { AppRoutingModule } from "./app-routing.module"
 import { JwtInterceptor } from "./interceptors/jwt.interceptor"
-import { HomePage } from "./pages/home/home.page"
 import { NavbarComponent } from "./components/navbar/navbar.component"
 import { AuthInterceptor } from "./interceptors/auth.interceptor"
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 @NgModule({
-  declarations: [AppComponent, HomePage],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, NavbarComponent],
+  declarations: [AppComponent],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, NavbarComponent,BrowserAnimationsModule],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
