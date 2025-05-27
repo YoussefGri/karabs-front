@@ -15,9 +15,12 @@
       <ion-button routerLink="/map">
         Carte
       </ion-button>
-      <ion-button routerLink="/explore">
-        Explorer
+      <ion-button routerLink="/categories">
+        Categories
       </ion-button>
+      <ion-button routerLink="/favoris">
+        Favoris
+      </ion-button>      
       <ion-button *ngIf="authService.isLoggedIn()" routerLink="/profile">
         Profil
       </ion-button>
@@ -32,7 +35,7 @@
 <ion-footer *ngIf="isMobile" class="ion-no-border mobile-navbar">
   <ion-toolbar>
     <ion-buttons class="ion-justify-content-between">
-      <ion-button routerLink="/home" routerDirection="root" routerLinkActive="active-tab">
+      <ion-button routerLink="/home-test" routerDirection="root" routerLinkActive="active-tab">
         <div class="tab-button-content">
           <ion-icon name="home-outline"></ion-icon>
           <ion-label>Accueil</ion-label>
@@ -46,10 +49,17 @@
         </div>
       </ion-button>
       
-      <ion-button routerLink="/explore" routerDirection="root" routerLinkActive="active-tab">
+      <ion-button routerLink="/categories" routerDirection="root" routerLinkActive="active-tab">
         <div class="tab-button-content">
           <ion-icon name="grid-outline"></ion-icon>
-          <ion-label>Explorer</ion-label>
+          <ion-label>Categories</ion-label>
+        </div>
+      </ion-button>
+
+      <ion-button routerLink="/favoris" routerDirection="root" routerLinkActive="active-tab">
+        <div class="tab-button-content">
+          <ion-icon name="heart-outline"></ion-icon>
+          <ion-label>Favoris</ion-label>
         </div>
       </ion-button>
       

@@ -173,12 +173,10 @@ export class AuthService {
     return user ? user.token : null
   }
 
-  // Ajouter une nouvelle méthode pour la réinitialisation du mot de passe
   requestPasswordReset(email: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/api/reset-password/request`, { email })
   }
 
-  // Méthode pour définir un nouveau mot de passe
   resetPassword(token: string, newPassword: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/api/reset-password/reset`, {
       token,
@@ -186,7 +184,6 @@ export class AuthService {
     })
   }
 
-  // Ajouter cette méthode à la classe AuthService
   updateCurrentUser(userData: any): void {
     const currentUser = this.currentUserSubject.value
     if (currentUser) {

@@ -23,40 +23,10 @@ export class ProfilePage implements OnInit {
       route: "/profile/account",
     },
     {
-      title: "Activités préférées",
-      icon: "heart",
-      color: "#cc2128",
-      route: "/profile/activities",
-    },
-    {
-      title: "Notifications",
-      icon: "notifications",
-      color: "#cc2128",
-      route: "/profile/notifications",
-    },
-    {
-      title: "Paramètres de communauté",
-      icon: "chatbubble",
-      color: "#cc2128",
-      route: "/profile/community",
-    },
-    {
-      title: "Données et Stockage",
-      icon: "pie-chart",
-      color: "#cc2128",
-      route: "/profile/data",
-    },
-    {
-      title: "Paramètres de Confidentialité",
-      icon: "lock-closed",
-      color: "#cc2128",
-      route: "/profile/privacy",
-    },
-    {
       title: "À propos du Krab's",
       icon: "information-circle",
       color: "#cc2128",
-      route: "/profile/about",
+      route: "/profile/a-propos",
     },
   ]
 
@@ -76,6 +46,7 @@ export class ProfilePage implements OnInit {
     const alert = await this.alertController.create({
       header: "Déconnexion",
       message: "Êtes-vous sûr de vouloir vous déconnecter?",
+      cssClass: 'custom-alert-class',
       buttons: [
         {
           text: "Annuler",

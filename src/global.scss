@@ -35,3 +35,19 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
+
+
+.md body, .ios body {
+  --ion-background-color: none;
+}
+
+ion-modal{
+    --background : #ffff;
+}
+
+ion-alert.custom-alert-class {
+  --background: #ffffff !important;
+  --color: #000000 !important;
+  --button-color: #d00000;
+  --backdrop-opacity: 0.4;
+}

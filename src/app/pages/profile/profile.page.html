@@ -1,15 +1,17 @@
 <ion-header class="ion-no-border">
-  <ion-toolbar color="light">
+  <ion-toolbar color="danger">
     <ion-title>Mon profil</ion-title>
     <ion-buttons slot="end" *ngIf="user">
       <ion-button (click)="logout()">
-        <ion-icon name="log-out-outline" slot="icon-only" color="danger"></ion-icon>
+        <ion-icon name="log-out-outline" slot="icon-only" color="light"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
+  <div class="full-center-mobile">
+  <div class="full-center">
   <div class="profile-card">
     <div *ngIf="user" class="profile-info">
       <div class="profile-header">
@@ -18,7 +20,6 @@
         </ion-avatar>
         <div class="profile-name-container">
           <h1 class="profile-name">{{ user.name }}</h1>
-          <p class="profile-activity">Activité préférée : manger</p>
         </div>
       </div>
       
@@ -40,6 +41,8 @@
       <p>Vous n'êtes pas connecté.</p>
       <ion-button expand="block" routerLink="/login" color="danger">Se connecter</ion-button>
     </div>
+  </div>
+  </div>
   </div>
 </ion-content>
 

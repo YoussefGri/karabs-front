@@ -1,0 +1,37 @@
+
+<ion-header class="ion-no-border">
+  <ion-toolbar color="danger">
+    <ion-title>Catégories</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="centered-content">
+  <div class="explore-container">
+    <div class="explore-card">
+      <div class="category-grid">
+        <ng-container *ngFor="let category of categories; let i = index">
+          <!-- <div class="category-item" 
+               [routerLink]="category.route"
+               [ngClass]="getCategoryClasses(i)">
+            <div class="category-image" [style.background-image]="'url(' + category.image + ')'">
+              <div class="category-overlay">
+                <span class="category-name">{{ category.name }}</span>
+              </div>
+            </div>
+          </div> -->
+          <div class="category-item"
+          [routerLink]="category.route"
+          [class.full-width-centered]="categories.length % 2 === 1 && i === 0"
+          [ngStyle]="{'box-shadow': category.color ? '0 6px 12px ' + category.color : '0 6px 12px rgba(0,0,0,0.15)'}">
+     
+            <div class="category-image" [style.background-image]="'url(' + category.image + ')'">
+              <div class="category-overlay">
+                <span class="category-name">{{ category.name }}</span>
+              </div>
+            </div>
+          </div>          
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</ion-content> 

@@ -16,7 +16,6 @@ import { AuthService } from "../../services/auth.service"
   imports: [CommonModule, FormsModule, IonicModule],
 })
 export class RegisterPage implements OnInit {
-  // Modèle pour les données du formulaire
   userData = {
     nom: "",
     prenom: "",
@@ -26,57 +25,75 @@ export class RegisterPage implements OnInit {
     codePostal: "",
   }
 
+  confirmPassword = ""
   errorMessage = ""
   isSubmitting = false
   registerForm: any
+  emailInvalid = false;
+passwordInvalid = false;
+passwordMismatch = false;
+confirmEmail = ""
+emailMismatch = false
 
   constructor(
     private http: HttpClient,
     private router: Router,
     private loadingController: LoadingController,
     private toastController: ToastController,
-    private authService: AuthService, // Add AuthService
+    private authService: AuthService,
   ) {}
 
   ngOnInit() {
-    // Redirect logged-in user
+    this.validateFormLive();
     if (this.authService.isLoggedIn()) {
       this.router.navigate(["/home"])
     }
   }
 
+  validateFormLive() {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+  this.emailInvalid = this.userData.email.length > 0 && !emailRegex.test(this.userData.email)
+  this.emailMismatch = this.userData.email !== this.confirmEmail && this.confirmEmail.length > 0
+
+  this.passwordInvalid = this.userData.password.length > 0 && this.userData.password.length < 6
+  this.passwordMismatch = this.userData.password !== this.confirmPassword && this.confirmPassword.length > 0
+}
+
+
   async register() {
-    // Rest of the code remains the same
-    // Validation basique
     if (
       !this.userData.nom ||
       !this.userData.prenom ||
       !this.userData.email ||
       !this.userData.password ||
       !this.userData.ville ||
-      !this.userData.codePostal
+      !this.userData.codePostal ||
+      !this.confirmPassword
     ) {
       this.errorMessage = "Tous les champs sont obligatoires"
       return
     }
 
-    // Validation du code postal (5 chiffres)
     const codePostalRegex = /^\d{5}$/
     if (!codePostalRegex.test(this.userData.codePostal)) {
       this.errorMessage = "Le code postal doit contenir 5 chiffres"
       return
     }
 
-    // Validation de l'email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(this.userData.email)) {
       this.errorMessage = "Veuillez entrer une adresse email valide"
       return
     }
 
-    // Validation du mot de passe (minimum 6 caractères)
     if (this.userData.password.length < 6) {
       this.errorMessage = "Le mot de passe doit contenir au moins 6 caractères"
+      return
+    }
+
+    if (this.userData.password !== this.confirmPassword) {
+      this.errorMessage = "Les mots de passe ne correspondent pas"
       return
     }
 
@@ -89,7 +106,6 @@ export class RegisterPage implements OnInit {
     })
     await loading.present()
 
-    // Appel à l'API d'inscription
     this.http.post(`${environment.apiUrl}/api/register`, this.userData).subscribe({
       next: async (response: any) => {
         loading.dismiss()
@@ -127,4 +143,3 @@ export class RegisterPage implements OnInit {
     })
   }
 }
-

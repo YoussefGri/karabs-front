@@ -28,11 +28,16 @@ export class LoginPage implements OnInit {
 
   ngOnInit(): void {
     // Vérifier s'il y a un token dans l'URL (après redirection OAuth)
+    console.log("Vérification du token d'authentification")
     this.authService.checkForAuthToken()
 
     // Rediriger l'utilisateur connecté
     if (this.authService.isLoggedIn()) {
+      console.log("Utilisateur déjà connecté, redirection vers la page d'accueil")
       this.router.navigate(["/home"])
+    }
+    else {
+      console.log("Utilisateur non connecté, affichage de la page de connexion")
     }
   }
 
