@@ -106,7 +106,7 @@ emailMismatch = false
     })
     await loading.present()
 
-    this.http.post(`${environment.apiUrl}/api/register`, this.userData).subscribe({
+    this.http.post(`${environment.apiUrl}/api/register`, this.userData, { withCredentials: true }).subscribe({
       next: async (response: any) => {
         loading.dismiss()
         this.isSubmitting = false
