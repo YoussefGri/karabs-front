@@ -105,6 +105,7 @@ emailMismatch = false
       spinner: "circles",
     })
     await loading.present()
+    console.log("reg", environment.apiUrl)
 
     this.http.post(`${environment.apiUrl}/api/register`, this.userData, { withCredentials: true }).subscribe({
       next: async (response: any) => {
