@@ -52,5 +52,16 @@
 		<string>We want your current position</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 		<string>To show your location</string>
+	
+	<key>CFBundleURLTypes</key>
+	<array>
+	<dict>
+		<key>CFBundleURLSchemes</key>
+		<array>
+		<string>karabs</string> <!-- ou myapp -->
+		</array>
+	</dict>
+	</array>
+
 </dict>
 </plist>

@@ -16,7 +16,7 @@ const config: CapacitorConfig = {
   webDir: "www",
   server: {
     androidScheme: "https",
-    // Autoriser la navigation vers votre nouveau domaine
+    iosScheme: 'https',
     allowNavigation: ["karabs-front.vercel.app", "karabs-backend1.up.railway.app", "localhost", "127.0.0.1"],
   },
   plugins: {

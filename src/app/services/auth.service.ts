@@ -120,10 +120,20 @@ export class AuthService {
     window.location.reload()
   }
 
-  async initiateOAuth(provider: string): Promise<void> {
-    const currentUrl = window.location.href.split("?")[0]
-    const redirectParam = `redirect_url=${encodeURIComponent(currentUrl)}`
-    const oauthUrl = `${this.apiUrl}/connect/${provider}?${redirectParam}`
+  /*
+  const redirectUrl = this.platform.is('capacitor')
+  ? 'karabs://auth/callback'
+  : window.location.href.split("?")[0];
+
+const oauthUrl = `${this.apiUrl}/connect/${provider}?redirect_url=${encodeURIComponent(redirectUrl)}`
+
+  */
+   async initiateOAuth(provider: string): Promise<void> {
+    const redirectUrl = this.platform.is('capacitor')
+      ? 'karabs://auth/callback'
+      : window.location.href.split("?")[0];
+      
+      const oauthUrl = `${this.apiUrl}/connect/${provider}?redirect_url=${encodeURIComponent(redirectUrl)}`
 
     if (this.platform.is("capacitor")) {
       await Browser.open({ url: oauthUrl })
@@ -133,6 +143,20 @@ export class AuthService {
       // La redirection sera gérée par checkForAuthToken à la prochaine initialisation de la page
     }
   }
+
+  // async initiateOAuth(provider: string): Promise<void> {
+  //   const currentUrl = window.location.href.split("?")[0]
+  //   const redirectParam = `redirect_url=${encodeURIComponent(currentUrl)}`
+  //   const oauthUrl = `${this.apiUrl}/connect/${provider}?${redirectParam}`
+
+  //   if (this.platform.is("capacitor")) {
+  //     await Browser.open({ url: oauthUrl })
+  //     // La redirection sera gérée par l'écouteur appUrlOpen
+  //   } else {
+  //     window.location.href = oauthUrl
+  //     // La redirection sera gérée par checkForAuthToken à la prochaine initialisation de la page
+  //   }
+  // }
 
   // Nouvelle méthode pour gérer les URLs d'ouverture d'application (pour Capacitor)
   private handleAppUrlOpen(url: string): void {
