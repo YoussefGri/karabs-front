@@ -7,9 +7,9 @@ PODS:
     - AppAuth/Core
   - Capacitor (6.2.1):
     - CapacitorCordova
-  - CapacitorApp (4.1.1):
+  - CapacitorApp (6.0.0):
     - Capacitor
-  - CapacitorBrowser (4.1.1):
+  - CapacitorBrowser (6.0.0):
     - Capacitor
   - CapacitorCordova (6.2.1)
   - CapacitorGeolocation (7.1.2):
@@ -97,8 +97,8 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AppAuth: d4f13a8fe0baf391b2108511793e4b479691fb73
   Capacitor: c95400d761e376be9da6be5a05f226c0e865cebf
-  CapacitorApp: 5aca4c22072c82d4df5296443e78818e7c6ffe71
-  CapacitorBrowser: a8ac0d5f0995062c5075df588e7f664efe5304ea
+  CapacitorApp: 30145f2ea2311e4f3744472119ec87d2ddf4c0a7
+  CapacitorBrowser: 2c55e9f586ba5a825f09fe7abb51110adf1cd448
   CapacitorCordova: 8d93e14982f440181be7304aa9559ca631d77fff
   CapacitorGeolocation: b005744861676af9abd19a0682f0b1af32cc2c99
   CapacitorGoogleMaps: 22dcbe5bc4beedaf30621901f6be90b32d1ea631
