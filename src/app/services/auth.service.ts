@@ -120,35 +120,32 @@ export class AuthService {
     window.location.reload()
   }
 
-async initiateOAuth(provider: string): Promise<void> {
-  const isMobile = this.platform.is('capacitor')
-  const redirectUrl = isMobile
-    ? 'karabs://auth/callback'
-    : window.location.href.split("?")[0]
+  /*
+  const redirectUrl = this.platform.is('capacitor')
+  ? 'karabs://auth/callback'
+  : window.location.href.split("?")[0];
 
-  const oauthUrl = `${this.apiUrl}/connect/${provider}?redirect_url=${encodeURIComponent(redirectUrl)}`
+const oauthUrl = `${this.apiUrl}/connect/${provider}?redirect_url=${encodeURIComponent(redirectUrl)}`
 
-  console.log("OAuth URL:", oauthUrl)
+  */
+   async initiateOAuth(provider: string): Promise<void> {
 
-  try {
-    if (isMobile) {
-      // Validation manuelle : URL doit être absolue avec http(s)
-      const isValidUrl = /^https?:\/\/.+$/.test(oauthUrl)
-      if (!isValidUrl) {
-        console.error("URL non valide (doit commencer par http(s)://)", oauthUrl)
-        return
-      }
-
+    
+    const redirectUrl = this.platform.is('capacitor')
+      ? 'karabs://auth/callback'
+      : window.location.href.split("?")[0];
+      
+      const oauthUrl = `${this.apiUrl}/connect/${provider}?redirect_url=${encodeURIComponent(redirectUrl)}`
       await this.platform.ready()
+    if (this.platform.is("capacitor")) {
+      console.log("OAuth URL:", oauthUrl)
       await Browser.open({ url: oauthUrl })
+      // La redirection sera gérée par l'écouteur appUrlOpen
     } else {
       window.location.href = oauthUrl
+      // La redirection sera gérée par checkForAuthToken à la prochaine initialisation de la page
     }
-  } catch (err) {
-    console.error("Erreur lors de l'ouverture de l'URL OAuth :", err)
   }
-}
-
 
   // async initiateOAuth(provider: string): Promise<void> {
   //   const currentUrl = window.location.href.split("?")[0]
