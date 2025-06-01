@@ -1,4 +1,4 @@
-package io.ionic.starter;
+package com.karabs.acm;
 
 import com.getcapacitor.BridgeActivity;
 import android.os.Bundle;
