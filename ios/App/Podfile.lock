@@ -5,13 +5,13 @@ PODS:
   - AppAuth/Core (1.7.6)
   - AppAuth/ExternalUserAgent (1.7.6):
     - AppAuth/Core
-  - Capacitor (7.2.0):
+  - Capacitor (6.2.1):
     - CapacitorCordova
   - CapacitorApp (7.0.0):
     - Capacitor
   - CapacitorBrowser (7.0.1):
     - Capacitor
-  - CapacitorCordova (7.2.0)
+  - CapacitorCordova (6.2.1)
   - CapacitorGeolocation (7.1.2):
     - Capacitor
     - IONGeolocationLib (~> 1.0)
@@ -96,10 +96,10 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AppAuth: d4f13a8fe0baf391b2108511793e4b479691fb73
-  Capacitor: 03bc7cbdde6a629a8b910a9d7d78c3cc7ed09ea7
+  Capacitor: c95400d761e376be9da6be5a05f226c0e865cebf
   CapacitorApp: 9cb31064a6c6bb2b1438583733a7bf45557fc1da
   CapacitorBrowser: 6299776d496e968505464884d565992faa20444a
-  CapacitorCordova: 5967b9ba03915ef1d585469d6e31f31dc49be96f
+  CapacitorCordova: 8d93e14982f440181be7304aa9559ca631d77fff
   CapacitorGeolocation: b005744861676af9abd19a0682f0b1af32cc2c99
   CapacitorGoogleMaps: 22dcbe5bc4beedaf30621901f6be90b32d1ea631
   CapacitorHaptics: 7be406a91e4eb87287f321c6c68e1709d6837b3a
