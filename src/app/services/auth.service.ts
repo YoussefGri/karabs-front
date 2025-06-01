@@ -136,6 +136,7 @@ const oauthUrl = `${this.apiUrl}/connect/${provider}?redirect_url=${encodeURICom
       const oauthUrl = `${this.apiUrl}/connect/${provider}?redirect_url=${encodeURIComponent(redirectUrl)}`
 
     if (this.platform.is("capacitor")) {
+      console.log("OAuth URL:", oauthUrl)
       await Browser.open({ url: oauthUrl })
       // La redirection sera gérée par l'écouteur appUrlOpen
     } else {
