@@ -129,12 +129,15 @@ const oauthUrl = `${this.apiUrl}/connect/${provider}?redirect_url=${encodeURICom
 
   */
    async initiateOAuth(provider: string): Promise<void> {
+
+    
     const redirectUrl = this.platform.is('capacitor')
       ? 'karabs://auth/callback'
       : window.location.href.split("?")[0];
       
-      const oauthUrl = `${this.apiUrl}/connect/${provider}?redirect_url=${encodeURIComponent(redirectUrl)}`
-
+    const oauthUrl = `${this.apiUrl}/connect/${provider}?redirect_url=${encodeURIComponent(redirectUrl)}`
+    await this.platform.ready()
+    
     if (this.platform.is("capacitor")) {
       console.log("OAuth URL:", oauthUrl)
       await Browser.open({ url: oauthUrl })

@@ -15,12 +15,11 @@ ion-content {
   width: 100%;
   max-width: 500px;
   margin: 0 auto; // centrage horizontal
-  padding: 16px;
 }
 
 // Carte principale avec bord arrondi et ombre
 .login-card {
-  width: 100%;
+  // width: 100%;
   border-radius: 15px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
@@ -39,7 +38,7 @@ ion-content {
   }
 
   ion-card-title {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     font-weight: bold;
     color: $primary-color; // Couleur du titre
   }

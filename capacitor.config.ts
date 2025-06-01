@@ -11,7 +11,7 @@
 import type { CapacitorConfig } from "@capacitor/cli"
 
 const config: CapacitorConfig = {
-  appId: "io.ionic.starter",
+  appId: "com.karabs.acm",
   appName: "krabs-front",
   webDir: "www",
   server: {
