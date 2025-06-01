@@ -17,7 +17,7 @@ const config: CapacitorConfig = {
   server: {
     androidScheme: "https",
     iosScheme: 'https',
-    allowNavigation: ["karabs-front.vercel.app", "karabs-backend1.up.railway.app", "localhost", "127.0.0.1"],
+    allowNavigation: ["karabs-front.vercel.app", "karabs-backend1.up.railway.app", "localhost", "127.0.0.1",  "karabs://auth/callback"],
   },
   plugins: {
     Browser: {
