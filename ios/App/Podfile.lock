@@ -7,9 +7,9 @@ PODS:
     - AppAuth/Core
   - Capacitor (6.2.1):
     - CapacitorCordova
-  - CapacitorApp (7.0.0):
+  - CapacitorApp (4.1.1):
     - Capacitor
-  - CapacitorBrowser (7.0.1):
+  - CapacitorBrowser (4.1.1):
     - Capacitor
   - CapacitorCordova (6.2.1)
   - CapacitorGeolocation (7.1.2):
@@ -21,11 +21,11 @@ PODS:
     - GoogleMaps (~> 8.4)
   - CapacitorHaptics (7.0.0):
     - Capacitor
-  - CapacitorKeyboard (7.0.0):
+  - CapacitorKeyboard (4.1.1):
     - Capacitor
   - CapacitorShare (7.0.1):
     - Capacitor
-  - CapacitorStatusBar (7.0.0):
+  - CapacitorStatusBar (4.1.1):
     - Capacitor
   - CodetrixStudioCapacitorGoogleAuth (0.0.1):
     - Capacitor
@@ -97,15 +97,15 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AppAuth: d4f13a8fe0baf391b2108511793e4b479691fb73
   Capacitor: c95400d761e376be9da6be5a05f226c0e865cebf
-  CapacitorApp: 9cb31064a6c6bb2b1438583733a7bf45557fc1da
-  CapacitorBrowser: 6299776d496e968505464884d565992faa20444a
+  CapacitorApp: 5aca4c22072c82d4df5296443e78818e7c6ffe71
+  CapacitorBrowser: a8ac0d5f0995062c5075df588e7f664efe5304ea
   CapacitorCordova: 8d93e14982f440181be7304aa9559ca631d77fff
   CapacitorGeolocation: b005744861676af9abd19a0682f0b1af32cc2c99
   CapacitorGoogleMaps: 22dcbe5bc4beedaf30621901f6be90b32d1ea631
   CapacitorHaptics: 7be406a91e4eb87287f321c6c68e1709d6837b3a
-  CapacitorKeyboard: 4db71e694e7afb5d7c0be09b05495c19f7d6c914
+  CapacitorKeyboard: aa7b004e1bb57fa3001c1a740d4482921d4f2065
   CapacitorShare: e573823f511f260f598d0423c33b1e3d7bbe5fd1
-  CapacitorStatusBar: a8c4c83ed2e973bdafb979e80e4b00d027832cb7
+  CapacitorStatusBar: 062f11f4e21d31114699866364073f639968ca53
   CodetrixStudioCapacitorGoogleAuth: 9dcfabfb7dd804ad6231a1513bc6e81e620cbec6
   Google-Maps-iOS-Utils: 66d6de12be1ce6d3742a54661e7a79cb317a9321
   GoogleMaps: 8939898920281c649150e0af74aa291c60f2e77d
